@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="fabric.js"></script>
+</head>
+
+<body>
+    <canvas id="c" width="1000px" height="1000px"></canvas>
+    <script>
+        var canvas = new fabric.Canvas('c');
+
+        // cornerDashArray”，“borderDashArray”，“borderColor”，“transparentCorners”“cornerColor”，“cornerStrokeColor”，“cornerStyle”，“selectionBackgroundColor”，“padding”和“cornerSize
+        // ["stroke","strokeWidth","fill","fontFamily","fontSize","fontWeight","fontStyle","underline","overline","linethrough","deltaY","textBackgroundColor"]
+        var text = new fabric.IText('Text', {
+            left: 310,
+            top: 300,
+            fontFamily: 'Comic Sans',
+            fontSize: 66,
+            fontWeight: 'bold', //normal 100 200...900
+            fontStyle: 'italic', //normal
+            fill: 'blue',
+            // textBackgroundColor:'red',  //文本背景色
+            textAlign: 'right',
+            lineHeight: 1,
+            // 
+            underline: false, //下划线
+            linethrough: false, //贯穿线
+            overline: false, //上划线
+            shadow: 'rgba(0,0,0,0.3) 5px 5px 5px', //阴影
+            stroke: '#c3bfbf', //描边颜色
+            strokeWidth: 0, //描边宽度
+            // 
+            // cornerColor: 'blue',
+            // cornerStyle: 'circle',
+            // cornerSize: 13,
+            // cornerStrokeColor: 'red',
+            // editingBorderColor: 'black'
+        });
+
+        text.set({
+            transparentCorners: false,
+            cornerColor: 'rgba(0,0,0,.4)',
+            cornerStrokeColor: '',
+            borderColor: 'rgba(0,0,0,.3)',
+            rotatePointOffset:30,
+            // selectionBackgroundColor:'rgba(0,0,0,.1)',
+            cornerSize: 14,
+            padding: 0,
+            cornerStyle: '',
+            borderDashArray: [4, 4],
+            cornerDashArray:[1,3]
+        });
+        canvas.on('mouse:down', function(options) {
+            console.log(options.e.clientX, options.e.clientY);
+            if (options.target) {
+                console.log('有对象被点击咯! ', options.target);
+            }
+        });
+        text.on('selected', function() {
+            console.log('selected a circle');
+        });
+        // text.animate('angle', '=+345', {
+        //     onChange: canvas.renderAll.bind(canvas),
+        //     duration: 1000,
+        //     easing: fabric.util.ease.easeOutBounce
+        // });
+        var circle = new fabric.Circle({
+            left: 200,
+            top: 100,
+            scaleX:3,
+            scaleY:3,
+            width:10,
+            radius: 50
+        });
+
+        // circle.setGradient('fill', {
+        //     x1: 0,
+        //     y1: 0,
+        //     x2: 0,
+        //     y2: circle.height,
+        //     colorStops: {
+        //         0: '#000',
+        //         1: '#fff'
+        //     }
+        // });
+        fabric.Image.fromURL('mla.png', function(img) {
+            // 添加滤镜
+            img.filters.push(new fabric.Image.filters.Grayscale());
+            // img.filters.push(
+            //     new fabric.Image.filters.Sepia(),
+            //     new fabric.Image.filters.Brightness({
+            //         brightness: 10
+            //     }));
+
+            // 图片加载完成之后，应用滤镜效果
+            img.applyFilters();
+            img.set({
+                left: 400,
+                top: 100,
+            })
+            // 将处理后的图片添加到canvas画布上
+            canvas.add(img);
+        });
+        canvas.add(text, circle);
+
+        canvas.on('text:changed', function(e) {
+            let text = e.target;
+            console.log('text:changed', text.text, text.width.toFixed(2), text.height.toFixed(2))
+        })
+        canvas.on('text:editing:exited', function(e) {
+            let text = e.target;
+            console.log('text:editing:exited', text.text, text.width.toFixed(2), text.height.toFixed(2))
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="../fabric.js"></script>
+</head>
+
+<body>
+    <canvas id="c" width="1000px" height="1000px"></canvas>
+    <script>
+        var canvas = new fabric.Canvas('c',{ isDrawingMode: true});
+rush = new fabric.PatternBrush(canvas)
+
+        var vLinePatternBrush = new fabric.BaseBrush(canvas);
+        vLinePatternBrush.getPatternSrc = function() {
+
+            var patternCanvas = fabric.document.createElement('canvas');
+            patternCanvas.width = patternCanvas.height = 10;
+            var ctx = patternCanvas.getContext('2d');
+
+            ctx.strokeStyle = this.color;
+            ctx.lineWidth = 5;
+            ctx.beginPath();
+            ctx.moveTo(0, 5);
+            ctx.lineTo(10, 5);
+            ctx.closePath();
+            ctx.stroke();
+
+            return patternCanvas;
+        };
+        canvas.freeDrawingBrush = vLinePatternBrush;
+    </script>
+</body>
+
+</html>

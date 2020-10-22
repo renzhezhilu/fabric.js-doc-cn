@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="fabric.js"></script>
+</head>
+
+<body>
+    <canvas id="c" width="1000px" height="1000px"></canvas>
+    <script>
+        var canvas = new fabric.Canvas('c');
+
+        var text = new fabric.IText('Text', {
+            left: 110,
+            top: 100,
+            fontSize: 66,
+            fill: 'blue',
+            lineHeight: 1,
+        });
+        var text2 = new fabric.IText('Value2222', {
+            left: 110,
+            top: 200,
+            fontSize: 66,
+            fill: 'blue',
+            lineHeight: 1,
+        });
+        canvas.add(text,text2);
+        var activeSelection = new fabric.ActiveSelection(canvas.getObjects(), {
+            canvas: canvas
+        });
+        console.log(activeSelection,canvas);
+        
+    </script>
+</body>
+
+</html>
