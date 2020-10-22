@@ -1,5 +1,7 @@
 
-# new Canvas()
+
+# fabric.Canvas
+官方文档:http://fabricjs.com/docs/fabric.Canvas.html
 ```javascript
  let canvas = new fabric.Canvas('canvasElementId');
 ```
@@ -40,6 +42,9 @@
 - [after:render]() 在渲染过程结束时，event: 接收回调中的上下文
 - [before:render]() 在开始渲染过程时，事件: 接收回调中的上下文
 
+---
+---
+---
 
 ## 成员
 
@@ -224,16 +229,407 @@
 ### vptCoords
     描述画布元素在设计属性tl，tr，bl，br上的扩展。如果画布未缩放/平移，则这些点是画布的四个角（如果画布是viewportTransformed），则这些点指示画布元素在普通未变换坐标中的扩展。使用@method calcViewportBoundaries更新坐标。
 
-### 
 
-### 
+---
+---
+---
 
-### 
+## 方法
 
-### 
+### __onMouseWheel(e)
+定义事件鼠标滚轮时的操作
+|类型|描述
+|---|---
+|Event|事件对象在 mouseup 上触发
 
-### 
+### _chooseObjectsToRender()
+    
+    将对象分成两组，一组用于立即呈现，另一组用于作为 activeGroup 呈现。
+返回: `Array`
+### _setCursorFromEvent(e, target)
+    根据画布悬停的位置设置光标。注意: Opera 中有很多 bug
+参数|类型|描述
+|---|---|---
+e|Event|事件对象
+target|Object|如果是，则为鼠标悬停状态
 
-### 
+### absolutePan(point)
+    平移视口，以便将点放置在画布的左上角
+参数|类型|描述
+|---|---|---
+point|fabric.Point|移动到
+ 返回: `fabric.Canvas`
 
-### 
+### add(…object)
+    将对象添加到集合、画布或组中，然后呈现画布(如果“ renderOnAddRemove”不是“ false”)。
+    如果第组没有改变包围盒。对象应该是 fabric 的实例(或从 fabric 继承)。对象此函数的使用对于组是非常不鼓励的。
+    您可以使用 add 方法添加一系列对象，但是您需要为 Group 类或 position/bbox 运行 addWithUpdate 调用将是错误的。
+参数|类型|性质|描述
+|---|---|---|---
+point|fabric.Object|必填可重复|零个或多个Fabric实例
+返回: `Self`
+
+### bringForward(object, intersectingopt) 
+    将对象或选定对象向上移动到绘制对象的堆栈中。
+    可选的相交参数允许将对象移动到第一个相交对象的前面。其中交点是用边界框计算的。
+    如果没有找到相交，则堆栈中不会有任何变化。
+参数|类型|性质|描述
+|---|---|---|---
+object|fabric.Object|必填|需要移动的对象
+intersecting|Boolean|选填|如果为‘ true’ ，则将物体送到下一个上交的物体前面
+返回：`fabric.Canvas`
+
+### bringToFront(object)
+    将对象或多重选择的对象移动到绘制对象堆栈的顶部
+参数|类型|性质|描述
+|---|---|---|---
+object|fabric.Object|必填|需要移动的对象
+返回：`fabric.Canvas`
+
+### calcOffset()
+    计算画布元素相对于文档的偏移量
+    此方法也作为窗口的“resize(调整大小)”事件处理程序附加
+返回：`fabric.Canvas`
+
+
+### calcViewportBoundaries()
+    使用当前的viewportTransform计算画布的4个角的位置。
+    使用对象绝对坐标（aCoords）有助于确定对象何时在当前渲染视口中
+返回：`Object`
+
+
+### centerObject(object)
+    在画布中垂直和水平中心对象
+参数|类型|性质|描述
+|---|---|---|---
+object|fabric.Object|必填|对象以垂直和水平方向居中
+返回：`fabric.Canvas`
+
+
+### centerObjectH(object)
+参数|类型|性质|描述
+|---|---|---|---
+object|fabric.Object|必填|对象以水平方向居中
+返回：`fabric.Canvas`
+
+
+### centerObjectV(object)
+参数|类型|性质|描述
+|---|---|---|---
+object|fabric.Object|必填|将对象垂直中心放在画布中
+返回：`fabric.Canvas`
+
+### clear()
+    清除实例的所有上下文（背景，主要，顶部）
+返回：`fabric.Canvas`
+
+### clearContext(ctx) 
+    清除画布元素的指定上下文
+参数|类型|性质|描述
+|---|---|---|---
+ctx|CanvasRenderingContext2D|必填|需要清除的背景
+返回：`fabric.Canvas`
+
+
+### clone(callbackopt, propertiesopt)
+    克隆画布实例
+参数|类型|性质|描述
+|---|---|---|---
+callback|Object|选填|作为第一个参数接收克隆实例
+properties|Array|选填|要包括在克隆画布和子画布中的属性数组
+没有返回，用回调接受
+
+### cloneWithoutData(callbackopt) 注意⚠️
+    无需克隆现有数据即可克隆 canvas 实例。
+    这基本上复制了画布维度、剪辑属性等，但是留下了空的数据(这样您就可以用自己的数据填充它)
+参数|类型|性质|描述
+|---|---|---|---
+callback|Object|必填|接收克隆的实例作为第一个参数
+没有返回，用回调接受
+
+
+### complexity()
+    返回数字形式表示的集合复杂性
+返回：`Number`
+
+### contains(object)
+    如果集合包含对象，则返回 true
+参数|类型|性质|描述
+|---|---|---|---
+object|Object|必填|对象进行检查
+返回：`Boolean`
+
+### createSVGFontFacesMarkup(objects)
+    创建包含SVG字体的标记
+    字体的字体URL必须由开发人员收集，而不是fabricjs从DOM中提取
+参数|类型|性质|描述
+|---|---|---|---
+object|Array|必填|fabric objects组成的数组
+返回：`String`
+
+### createSVGRefElementsMarkup()
+    创建包含 SVG 引用元素(如模式、渐变等)的标记。
+返回：`String`
+
+### discardActiveObject(e)
+    丢弃当前活动的对象和火灾事件。
+    如果构造函数是由于鼠标事件而由Fabric调用的，则该事件将作为参数传递并发送到自定义事件的fire函数。
+    当用作方法时，e参数没有任何应用程序。
+参数|类型|性质|描述
+|---|---|---|---
+e|event||
+
+### dispose()
+    清除画布元素并删除所有事件侦听器
+返回：`fabric.Canvas`
+
+### drawClipPathOnCanvas(ctx)
+    在lowerCanvasEl上绘制缓存的clipPath
+参数|类型|性质|描述
+|---|---|---|---
+ctx|CanvasRenderingContext2D|必填|要渲染的上下文
+没有返回
+
+### drawControls(ctx)
+    绘制对象的控件(边框/控件)
+参数|类型|性质|描述
+|---|---|---|---
+ctx|CanvasRenderingContext2D|必填|要呈现控件的上下文
+没有返回
+
+### findTarget(e, skipGroup)
+    确定我们在skipGroup参数上单击的对象是供内部使用的方法，对于shift + click动作来说是必需的。
+    11/09/2018 TODO：如果findTarget可以辨别是完整目标还是角落的外部，这将很酷。
+参数|类型|性质|描述
+|---|---|---|---
+e|Event||鼠标事件
+skipGroup|Boolean||为true时，将跳过activeGroup并仅遍历对象
+返回：`fabric.Object`
+
+### fire(eventName, optionsopt)
+    触发带有可选选项对象的事件
+参数|类型|性质|描述
+|---|---|---|---
+eventName|String|必填|事件名称
+optionsopt|Boolean|选填|选项对象Options object
+返回：`Self`
+
+### forEachObject(callback, context)
+    为该组中的每个对象执行给定的功能
+参数|类型|性质|描述
+|---|---|---|---
+callback|function|必填|使用当前对象作为第一个参数调用索引，第二个索引作为第三个参数，所有对象组成的数组作为第三个参数。如果未指定`context`参数，则在全局对象（例如“ window”）的上下文中调用回调
+context|Object|必填|上下文（又名thisObject）
+返回：`Self`
+
+### fxCenterObjectH(object, callbacksopt)
+    中心对象水平与动画。
+参数|类型|性质|描述
+|---|---|---|---
+object|fabric.Object|必填|物体居中
+callbacks|Object|选填|具有可选“ onComplete”和/或“ onChange”属性的回调对象
+
+参数|类型|性质|描述
+|---|---|---|---
+onComplete|function|必填|完成时调用
+onChange|function|选填|调用动画的每个步骤
+返回：`fabric.Canvas`
+
+### fxCenterObjectV(object, callbacksopt) 
+    中心对象垂直与动画。
+参数|类型|性质|描述
+|---|---|---|---
+object|fabric.Object|必填|物体居中
+callbacks|Object|选填|具有可选“ onComplete”和/或“ onChange”属性的回调对象
+
+参数|类型|性质|描述
+|---|---|---|---
+onComplete|function|必填|完成时调用
+onChange|function|选填|调用动画的每个步骤
+返回：`fabric.Canvas`
+
+### fxRemove(object, callbacksopt)
+    与`fabric.Canvas＃remove`相同，但动画化
+参数|类型|性质|描述
+|---|---|---|---
+object|fabric.Object|必填|要删除的
+callbacks|Object|选填|具有可选“ onComplete”和/或“ onChange”属性的回调对象
+
+参数|类型|性质|描述
+|---|---|---|---
+onComplete|function|必填|完成时调用
+onChange|function|选填|调用动画的每个步骤
+返回：`fabric.Canvas`
+
+### fxStraightenObject(object)
+    和 fabric 一样，Canvas.prototype.straightenObject，但是是动画的
+参数|类型|性质|描述
+|---|---|---|---
+object|fabric.Object|必填|整理
+返回：`fabric.Canvas`
+
+### getActiveObject()
+    返回当前活动对象
+返回：`fabric.Object`
+
+### getActiveObjects()
+    返回具有当前选定对象的数组
+返回：`fabric.Object`
+
+### getCenter() → {Object}
+    返回画布中心的坐标。返回值是一个具有左上方属性的对象
+返回：`Object`
+
+### getContext() → {CanvasRenderingContext2D}
+    返回绘制对象的画布上下文
+
+返回：`CanvasRenderingContext2D`
+
+### getElement() → {HTMLCanvasElement}
+    返回与此实例对应的 < canvas > 元素
+返回：`HTMLCanvasElement`
+
+### getHeight() → {Number}
+    返回画布高度(px)
+返回：`Number`
+
+### getObjects(typeopt) → {Array}
+    返回此实例类型参数的子对象数组，该对象在1.3.10中引入，因为自2.3.5开始，此方法始终返回该数组的COPY；
+参数|类型|性质|描述
+|---|---|---|---
+type|String|选填|如果指定，则只返回此类型的对象
+返回：`Array`
+
+### getPointer(e, ignoreZoom) → {Object}
+    返回相对于画布的指针坐标。可以返回带或不带viewportTransform的坐标。 
+    ignoreZoom false会返回表示在画布元素上单击的点的坐标。 ignoreZoom true是由viewportTransform处理后返回的坐标（单击的画布上显示的坐标的某种坐标。
+    ignoreZoom true =相对于顶部的HTMLElement坐标，左为ignoreZoom false，默认=织物空间坐标，用于形状位置要在顶部和左侧与形状进行交互，大多数时候您都想使用ignoreZoom true，而ignoreZoom false将使您当时的坐标与object.oCoords系统兼容。
+参数|类型|性质|描述
+|---|---|---|---
+e|Event	||
+ignoreZoom|Boolean||
+返回：`Object`数值为“ x”和“ y”的对象
+
+### getSelectionContext() → {CanvasRenderingContext2D}
+    返回绘制对象选择的画布的上下文
+返回：`CanvasRenderingContext2D`
+
+### getSelectionElement() → {HTMLCanvasElement}
+    返回在其上绘制对象选择的<canvas>元素
+返回：`HTMLCanvasElement`
+
+### getVpCenter() → {fabric.Point}
+    计算画布中与实际视口中心相对应的点。
+返回：`fabric.Point`视口中心
+
+### getWidth() → {Number}
+    返回画布宽度(px)
+返回：`Number`
+
+### getZoom() → {Number}
+    返回画布缩放级别
+返回：`Number`
+
+### initialize(el, optionsopt) → {Object}
+    建设者
+参数|类型|性质|描述
+|---|---|---|---
+el|HTMLElement、String|必填|`<canvas>`元素以初始化实例
+options|Object|选填|选项对象 Options object
+返回：`Object`
+
+### insertAt(object, index, nonSplicing) → {Self}
+    在指定的索引处将一个对象插入到集合中，然后渲染画布（如果`renderOnAddRemove`不是`false`），则该对象应该是fabric的一个实例（或继承自该对象）。
+    您可以使用insertAt方法添加一堆对象，但随后需要为Group类或position / bbox运行addWithUpdate调用将是错误的。
+参数|类型|性质|描述
+|---|---|---|---
+object|Object|必填|要插入对象
+index|Number|必填|要插入对象的索引
+nonSplicing|Boolean|必填|如果为true，则不会发生对象的拼接（移动）
+返回：`Self`
+
+### isEmpty() → {Boolean}
+    如果collection不包含任何对象，则返回true
+返回：`Boolean`
+
+### isTargetTransparent(target, x, y) → {Boolean}
+    如果对象在某个位置是透明的，则返回 true
+参数|类型|性质|描述
+|---|---|---|---
+target|fabric.Object|必填|要检查的对象
+x|Number|必填|左座标
+y|Number|必填|上座标
+返回：`Boolean`
+
+### item(index) → {Self}
+    返回指定索引处的对象
+参数|类型|性质|描述
+|---|---|---|---
+index|Number||
+返回：`Self`
+
+### loadFromJSON(json, callback, reviveropt) → {fabric.Canvas}
+    使用来自指定JSON的数据填充画布。 JSON格式必须符合fabric.Canvas＃toJSON之一。
+参数|类型|性质|描述
+|---|---|---|---
+json|String、Object|必填|JSON 字符串或对象
+callback|function|必填|回调，在解析json并初始化对应的对象（例如fabric.Image）时调用
+reviver|function|选填|进一步解析JSON元素的方法，在创建每个Fabric对象之后调用。
+返回：`fabric.Canvas`
+```javascript
+canvas.loadFromJSON(json, canvas.renderAll.bind(canvas), function(o, object) {
+  // `o` = json object
+  // `object` = fabric.Object instance
+  // ... do some stuff ...
+});
+```
+### moveTo(object, index) → {fabric.Canvas}
+    将对象移动到绘制对象堆栈中的指定级别
+参数|类型|性质|描述
+|---|---|---|---
+object|fabric.Object|必填|要设置的对象
+index|Number|必填|要移动到的位置
+返回：`fabric.Canvas`
+
+### relativePan(point) → {fabric.Canvas}
+    相对平移观点
+参数|类型|性质|描述
+|---|---|---|---
+point|fabric.Point|必填|（位置向量）移动
+返回：`fabric.Canvas`
+
+### remove(…object) → {Self}
+    从集合中移除对象，然后渲染画布（如果`renderOnAddRemove`不是`false`）
+参数|类型|性质|描述
+|---|---|---|---
+object|	fabric.Object|可重复的|零个或多个Fabric实例
+返回：`Self`
+
+### removeListeners()
+    删除所有事件监听器
+没有返回
+
+### renderAll() → {fabric.Canvas}
+    同时渲染顶部画布和辅助容器画布。
+返回：`fabric.Canvas`
+
+### renderCanvas(ctx, objects) → {fabric.Canvas}
+    渲染背景，对象，叠加层和控件
+参数|类型|性质|描述
+|---|---|---|---
+ctx|CanvasRenderingContext2D|必填|
+objects|Array|必填| 要渲染的对象数组
+返回：`fabric.Canvas`
+
+### renderTop() → {fabric.Canvas}
+    仅渲染顶部画布的方法。也用于渲染组选择框。
+返回：`fabric.Canvas`
+
+
+### requestRenderAll() → {fabric.Canvas}
+    将renderAll请求追加到下一个动画帧。
+    除非已经进行过，否则在这种情况下将不做任何操作，布尔标志将避免附加更多内容。
+返回：`fabric.Canvas`
+
+
+
