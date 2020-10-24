@@ -531,7 +531,7 @@ ignoreZoom|Boolean||
 返回：`Number`
 
 ### initialize(el, optionsopt) 
-    建设者
+    初始化
 参数|类型|性质|描述
 |---|---|---|---
 el|HTMLElement、String|必填|`<canvas>`元素以初始化实例
@@ -633,14 +633,14 @@ objects|Array|必填| 要渲染的对象数组
 返回：`fabric.Canvas`
 
 
-### restorePointerVpt(pointer) → {Object}
+### restorePointerVpt(pointer) 
     返回不受视口影响的指针坐标
 参数|类型|性质|描述
 |---|---|---|---
 pointer|Object|必填|具有“ x”和“ y”数字值
 返回：`Object`
 
-### sendBackwards(object, intersectingopt) → {fabric.Canvas}
+### sendBackwards(object, intersectingopt) 
     将对象或选区向下移动到绘制对象的堆栈中。可选参数，相交允许将对象移至第一个相交对象的后面。其中交点是用边界框计算的。如果没有找到相交，则堆栈中不会有任何变化。
 参数|类型|性质|描述
 |---|---|---|---
@@ -648,14 +648,14 @@ object|fabric.Object|必填|具有“ x”和“ y”数字值
 intersecting|Boolean|选填|如果为true，则在下一个较低的相交对象之后发送对象
 返回：`fabric.Canvas`
 
-### sendToBack(object) → {fabric.Canvas}
+### sendToBack(object) 
     将一个或多个选择的对象移动到绘制对象堆栈的底部
 参数|类型|性质|描述
 |---|---|---|---
 object|fabric.Object|必填|对象发送回
 返回：`fabric.Canvas`
 
-### setActiveObject(object, eopt) → {fabric.Canvas}
+### setActiveObject(object, eopt) 
     将给定对象设置为画布上唯一的活动对象
 参数|类型|性质|描述
 |---|---|---|---
@@ -663,7 +663,7 @@ object|fabric.Object|必填|对象设置为活动对象
 e|Event|选填|事件（触发“ object：selected”时传递）
 返回：`fabric.Canvas`
 
-### setBackgroundColor(backgroundColor, callback) → {fabric.Canvas}
+### setBackgroundColor(backgroundColor, callback) 
     设置此画布的背景颜色
 参数|类型|性质|描述
 |---|---|---|---
@@ -686,7 +686,7 @@ canvas.setBackgroundColor({
 }, canvas.renderAll.bind(canvas));
 ```
 
-### setBackgroundImage(image, callback, optionsopt) → {fabric.Canvas}
+### setBackgroundImage(image, callback, optionsopt) 
     设置这个画布的背景图像
 参数|类型|性质|描述
 |---|---|---|---
@@ -735,7 +735,7 @@ canvas.setBackgroundImage('http://fabricjs.com/assets/honey_im_subtle.png', canv
 });
 
 ```
-### setDimensions(dimensions, optionsopt) → {fabric.Canvas}
+### setDimensions(dimensions, optionsopt) 
     设置此画布实例的尺寸（宽度，高度）。
     当options.cssOnly标志处于活动状态时，您还应该提供度量单位（px /％/ em）
 返回：`fabric.Canvas`
@@ -758,7 +758,7 @@ cssOnly|Boolean(false)|选填|将给定尺寸仅设置为CSS尺寸
 
 
 
-### setHeight(value, optionsopt) → {fabric.Canvas}
+### setHeight(value, optionsopt) 
     设置此画布实例的高度
 参数|类型|性质|描述
 |---|---|---|---
@@ -771,7 +771,7 @@ backstoreOnly|Boolean(false)|选填|将给定尺寸仅设置为画布后台存�
 cssOnly|Boolean(false)|选填|将给定尺寸仅设置为CSS尺寸
 返回：`fabric.Canvas`
 
-### setOverlayColor(overlayColor, callback) → {fabric.Canvas}
+### setOverlayColor(overlayColor, callback) 
     设置此画布的前景色
 参数|类型|性质|描述
 |---|---|---|---
@@ -791,7 +791,7 @@ canvas.setOverlayColor({
 }, canvas.renderAll.bind(canvas));
 ```
 
-### setOverlayImage(image, callback, optionsopt) → {fabric.Canvas}
+### setOverlayImage(image, callback, optionsopt) 
     设置此画布的覆盖图像
 参数|类型|性质|描述
 |---|---|---|---
@@ -841,14 +841,14 @@ canvas.setOverlayImage('http://fabricjs.com/assets/jail_cell_bars.png', canvas.r
 });
 
 ```
-### setViewportTransform(vpt) → {fabric.Canvas}
+### setViewportTransform(vpt) 
     设置此画布实例的视口变换
 参数|类型|性质|描述
 |---|---|---|---
 vpt|Array|必填|以context.transform形式的转换
 返回：`fabric.Canvas`
 
-### setWidth(value, optionsopt) → {fabric.Canvas}
+### setWidth(value, optionsopt) 
     设置此画布实例的宽度
 参数|类型|性质|描述
 |---|---|---|---
@@ -861,18 +861,18 @@ backstoreOnly|Boolean(false)|选填|将给定尺寸仅设置为画布后台存�
 cssOnly|Boolean(false)|选填|将给定尺寸仅设置为CSS尺寸
 返回：`fabric.Canvas`
 
-### setZoom(value) → {fabric.Canvas}
+### setZoom(value) 
     设置此画布实例的缩放级别
 参数|类型|性质|描述
 |---|---|---|---
 value|Number|必填|设置缩放到小于1
 返回：`fabric.Canvas`
 
-### size() → {Number}
+### size() 
     返回集合的大小（即：包含其对象的数组的长度）
 返回：`Number`
 
-### straightenObject(object) → {fabric.Canvas}
+### straightenObject(object) 
     拉直对象，然后重新渲染画布
 参数|类型|性质|描述
 |---|---|---|---
@@ -897,21 +897,21 @@ top|Number|选填|裁剪上偏移
 width|Number|选填|裁剪宽度
 height|Number|选填|裁剪高度
 
-### toDatalessJSON(propertiesToIncludeopt) → {String}
+### toDatalessJSON(propertiesToIncludeopt) 
     还原画布的无数据JSON表示形式
 参数|类型|性质|描述
 |---|---|---|---
 propertiesToInclude|Array|选填|您可能希望在输出中另外包含的所有属性
 返回：`String`
 
-### toDatalessObject(propertiesToIncludeopt) → {Object}
+### toDatalessObject(propertiesToIncludeopt) 
     返回画布的无数据对象表示形式
 参数|类型|性质|描述
 |---|---|---|---
 propertiesToInclude|Array|选填|您可能希望在输出中另外包含的任何属性
 返回：`Object`
 
-### toDataURL(optionsopt) → {String}
+### toDataURL(optionsopt) 
     将canvas元素导出到dataurl图像。请注意，使用倍增器时，裁剪会适当缩放
 参数|类型|性质|描述
 |---|---|---|---
@@ -946,7 +946,7 @@ var dataURL = canvas.toDataURL({
   multiplier: 2
 });
 ```
-### toJSON(propertiesToIncludeopt) → {String}
+### toJSON(propertiesToIncludeopt) 
     返回画布的JSON表示形式
 参数|类型|性质|描述
 |---|---|---|---
@@ -959,18 +959,18 @@ var json = canvas.toJSON(['lockMovementX', 'lockMovementY', 'lockRotation', 'loc
 canvas.includeDefaultValues = false;
 var json = canvas.toJSON();
 ```
-### toObject(propertiesToIncludeopt) → {Object}
+### toObject(propertiesToIncludeopt) 
     返回画布的对象表示形式
 参数|类型|性质|描述
 |---|---|---|---
 propertiesToInclude|Array|选填|您可能希望在输出中另外包含的所有属性
 返回：`Object`
 
-### toString() → {String}
+### toString() 
     返回实例的字符串表示形式
 返回：`String`
 
-### toSVG(optionsopt, reviveropt) → {String}
+### toSVG(optionsopt, reviveropt) 
     返回画布的SVG表示形式
 参数|类型|性质|描述
 |---|---|---|---
@@ -1015,28 +1015,28 @@ var svg = canvas.toSVG(null, function(svg) {
   return svg.replace('stroke-dasharray: ; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; ', '');
 });
 ```
-### viewportCenterObject(object) → {fabric.Canvas}
+### viewportCenterObject(object) 
     将对象在视口中垂直和水平居中
 参数|类型|性质|描述
 |---|---|---|---
 object|fabric.Object|必填|对象垂直和水平居中
 返回：`fabric.Canvas`
 
-### viewportCenterObjectH(object) → {fabric.Canvas}
+### viewportCenterObjectH(object) 
     将对象在视口中水平居中，object.top不变
 参数|类型|性质|描述
 |---|---|---|---
 object|fabric.Object|必填|对象垂直和水平居中
 返回：`fabric.Canvas`
 
-### viewportCenterObjectV(object) → {fabric.Canvas}
+### viewportCenterObjectV(object) 
     将对象垂直居中放置在视口中，object.top不变
 参数|类型|性质|描述
 |---|---|---|---
 object|fabric.Object|必填|对象垂直和水平居中
 返回：`fabric.Canvas`
 
-### zoomToPoint(point, value) → {fabric.Canvas}
+### zoomToPoint(point, value) 
     设置此画布实例的缩放级别，以点为中心缩放
 参数|类型|性质|描述
 |---|---|---|---
@@ -1048,84 +1048,3 @@ value|Number|必填|设置缩放，小于1缩放
 ###
 
 返回：``
-
-###
-
-返回：``
-
-###
-
-返回：``
-
-###
-
-返回：``
-
-###
-
-返回：``
-
-###
-
-返回：``
-
-###
-
-返回：``
-
-###
-
-返回：``
-
-###
-
-返回：``
-
-###
-
-返回：``
-
-###
-
-返回：``
-
-###
-
-返回：``
-
-###
-
-返回：``
-
-###
-
-返回：``
-
-###
-
-返回：``
-
-###
-
-返回：``
-
-###
-
-返回：``
-
-###
-
-返回：``
-
-###
-
-返回：``
-
-###
-
-返回：``
-
-###
-
-返回：``
-
