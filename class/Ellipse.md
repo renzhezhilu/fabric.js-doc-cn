@@ -3,7 +3,7 @@
 
 大部分成员和方法与`fabric.Circle`相同
 
-### new Ellipse() → {fabric.Ellipse}
+### new Ellipse() 
 返回：`fabric.Ellipse`
 
 
@@ -22,7 +22,7 @@
     垂直半径
 赋值类型：`Number`
 
-### (static) fromElement(element, callbackopt) → {fabric.Ellipse}
+### (static) fromElement(element, callbackopt) 
     从 SVG 元素返回 fabric.Ellipse实例
 参数|类型|性质|描述
 |---|---|---|---
@@ -30,7 +30,7 @@ element|SVGElement|必填|要解析的元素
 callback|function|选填|解析完成后调用的选项回调
 返回：`fabric.Ellipse`
 
-### (static) fromObject(object, callbackopt) → {fabric.Ellipse}
+### (static) fromObject(object, callbackopt) 
     从对象表示形式返回 fabric.Ellipse实例
 参数|类型|性质|描述
 |---|---|---|---
@@ -38,15 +38,15 @@ object|Object|必填|对象创建实例
 callback|function|选填|以新实例作为第一个参数调用
 返回：`fabric.Ellipse`
 
-### getRx() → {Number}
+### getRx() 
     返回对象的水平半径(根据对象的缩放方式)
 返回：`Number`
 
-### getRy() → {Number}
+### getRy() 
     返回对象的垂直半径(根据对象的缩放方式)
 返回：`Number`
 
-### initialize(optionsopt) → {fabric.Ellipse}
+### initialize(optionsopt) 
     初始化Constructor
  参数|类型|性质|描述
 |---|---|---|---

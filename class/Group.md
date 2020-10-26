@@ -1,15 +1,10 @@
 
-# fabric.Circle
+# fabric.Group
 继承fabric.Object
 
-link：http://fabricjs.com/docs/fabric.Circle.html
+link：http://fabricjs.com/docs/fabric.Group.html
 
 ## 成员
-
-### ATTRIBUTE_NAMES
-    静态方法
-    解析SVG元素时要考虑的属性名称列表（由fabric.Circle.fromElement使用）
-返回：``
 
 ### __corner 
     保持鼠标移动过程中最后一个悬停的角的值。 
@@ -52,9 +47,10 @@ link：http://fabricjs.com/docs/fabric.Circle.html
 赋值类型：`Number(1)`
 
 ### cacheProperties
-    检查高速缓存是否需要刷新时要考虑的属性列表可以通过statefullCache ON（或如果需要的话是惰性模式）或通过单次调用Object.set（key，value）来检查那些属性。
-    如果关键点在此列表中，则将该对象标记为脏并在下一次渲染时刷新
-赋值类型：`Array`
+<!-- 检查高速缓存是否需要刷新时要考虑的属性列表可以通过statefullCache ON（或如果需要的话是惰性模式）或通过单次调用Object.set（key，value）来检查那些属性。
+    如果关键点在此列表中，则将该对象标记为脏并在下一次渲染时刷新 -->
+    组是容器，不自行渲染任何内容，因为没有缓存属性
+赋值类型：`Array([])`
 
 ### centeredRotation
     设置为true时，通过控件旋转时，此对象将使用中心点作为变换的原点。
@@ -103,10 +99,10 @@ link：http://fabricjs.com/docs/fabric.Circle.html
     当设置为“ true”时，对象的缓存将在下一次渲染调用时重新渲染。从1.7.0开始
 赋值类型：`Boolean`
 
-### endAngle
+<!-- ### endAngle
     圆弧形的结束角度，应为度，这是一个疏忽。
     在下一个主要版本中可能会更改为度
-赋值类型：`Number`
+赋值类型：`Number` -->
 
 ### evented 
     设置为false时，对象不能成为事件的目标。所有事件都通过它传播。在v1.3.4中引入
@@ -251,9 +247,9 @@ link：http://fabricjs.com/docs/fabric.Circle.html
     设置为“ true”时，将在画布上以像素为单位“找到”对象，而不是根据边界框
 赋值类型：`Boolean`
 
-### radius
+<!-- ### radius
     圆的半径
-赋值类型：`Number`
+赋值类型：`Number` -->
 
 ### scaleX
     对象缩放因子（水平）
@@ -284,10 +280,10 @@ link：http://fabricjs.com/docs/fabric.Circle.html
     物体y轴上的偏斜角（以度为单位）
 赋值类型：`Number`
 
-### startAngle
+<!-- ### startAngle
     圆的起始角度，沿顺时针方向偏移，该角度应为度，这是一个疏忽。
     在下一个主要版本中可能会更改为度
-赋值类型：`Number`
+赋值类型：`Number` -->
 
 ### statefullCache
     当为true时，检查对象属性的高速缓存无效。
@@ -331,6 +327,10 @@ link：http://fabricjs.com/docs/fabric.Circle.html
     用于渲染此对象的笔触宽度
 赋值类型：`Number(1)`
 
+### subTargetCheck
+    指示click，mouseover，mouseout事件和hover光标是否还应检查子目标
+赋值类型：`Boolean`
+
 ### top
     对象的最高位置。请注意，默认情况下，它是相对于对象顶部的。您可以通过设置originY = {top / center / bottom}来更改此设置
 赋值类型：`Number`
@@ -347,6 +347,12 @@ link：http://fabricjs.com/docs/fabric.Circle.html
     对象的类型
 赋值类型：`String(circle)`
 
+ :Boolean
+### useSetOnGroup
+    setOnGroup是用于TextBox的方法，自2.0.0开始不再使用。将该布尔值设置为true时，该行为仍然可用。
+赋值类型：`Boolean`
+
+
 ### visible
     设置为false时，对象不会在画布上渲染
 赋值类型：`Boolean(true)`
@@ -356,15 +362,14 @@ link：http://fabricjs.com/docs/fabric.Circle.html
 赋值类型：`Number`
 
 ## 方法
-### fromElement(element, callbackopt, optionsopt)
+### fromObject(object, callbackopt)
     静态方法
-    从一个 SVG 元素返回 fabric
+    从对象表示中返回fabric.Group实例
 参数|类型|性质|描述
 |---|---|---|---
-element|SVGElement|必填|要解析的元素
-callback|function|选填|解析完成后调用的选项回调
-options|Object|选填|选项
-错误时返回：`Error`
+object|Object|必填|从中创建组的对象
+callback|function|选填|创建组实例时要调用的回调
+<!-- 错误时返回：`Error` -->
 
 ### fromObject(object, callbackopt)
     静态方法
@@ -424,7 +429,26 @@ ctx|CanvasRenderingContext2D|必填|要渲染的上下文
 
 ### _toSVG() 
     返回实例的 svg 表示形式
-返回：`Array`
+参数|类型|性质|描述
+|---|---|---|---
+reviver|function|选填|SVG表示的进一步解析方法
+返回：`String`，实例的svg表示
+
+### add(…object) → {Self}
+    将对象添加到集合，Canvas或Group中，然后渲染canvas（如果`renderOnAddRemove`不是`false`）。
+    如果是“组”，则不会更改边界框。对象应该是fabric的实例（或从fabric继承）。对于组，强烈建议不要使用此功能。
+    您可以使用add方法添加一堆对象，但随后需要为Group类或position / bbox运行addWithUpdate调用将是错误的
+参数|类型|性质|描述
+|---|---|---|---
+object|fabric.Object|可重复|零个或多个Fabric实例
+返回：`Self`
+
+### addWithUpdate(object) → {fabric.Group}
+    将对象添加到组；然后重新计算组的尺寸，位置。
+参数|类型|性质|描述
+|---|---|---|---
+object|Object|必填|
+返回：`fabric.Group`
 
 ### adjustPosition(to)
     调整位置
@@ -511,8 +535,16 @@ withoutShadow|	Boolean|选填|移除当前对象的阴影
 返回：`fabric.Object`
 
 ### complexity() 
-    返回实例的复杂性
+    返回集合复杂度的数字表示
 返回：`Number`，此实例的复杂度（除非是子类，否则为1）
+
+### contains(object) → {Boolean}
+    如果collection包含一个对象，则返回true
+参数|类型|性质|描述
+|---|---|---|---
+object|Object|必填|要检查的对象
+返回：`Boolean`,如果集合包含一个对象，则为true
+
 
 ### containsPoint(point, linesopt, absoluteopt, calculateopt) 
     检查点是否在对象内
@@ -523,6 +555,10 @@ lines|Object|选填|对象从@method _ getImageLines 返回
 absolute|Boolean|选填| 使用不带viewportTransform的坐标
 calculate|Boolean|选填|使用当前位置的坐标而不是.oCoords
 返回：`Boolean`，如果点在对象内，则为true
+
+### destroy() → {fabric.Group}
+    销毁一个组（恢复其对象的状态）
+返回：`fabric.Group`
 
 ### drawBorders(ctx, styleOverride)
     绘制对象边界框的边界。需要公共属性：宽度，高度需要公共选项：padding，borderColor
@@ -581,6 +617,14 @@ ctx|CanvasRenderingContext2D|必填|要渲染的上下文
 |---|---|---|---
 fn|function|必填|函数在控件上迭代
 
+### forEachObject(callback, context) → {Self}
+    为该组中的每个对象执行给定的功能
+参数|类型|性质|描述
+|---|---|---|---
+callback|function|必填|使用当前对象作为第一个参数调用索引，第二个索引作为第三个参数，所有对象组成的数组作为第三个参数。如果未指定`context`参数，则在全局对象（例如“ window”）的上下文中调用回调
+context|Object|必填|上下文（又名thisObject）
+返回：`Self`
+
 ### fxStraighten(callbacks)
     与fabric.Object.prototype.straighten相同，但带有动画
 参数|类型|性质|描述
@@ -621,6 +665,13 @@ pointer|Object|选填|要操作的指针（而不是事件）
     返回对象不透明度计数和组属性
 返回：`Number`
 
+### getObjects(typeopt) → {Array}
+    返回此实例类型参数的子对象数组，该对象在1.3.10中引入，因为2.3.5以来，此方法始终返回该数组的COPY；
+参数|类型|性质|描述
+|---|---|---|---
+type|String|必填|指定后，仅返回此类型的对象
+返回：`Array`
+
 ### getObjectScaling() 
     返回对象缩放因子计数和组缩放
 返回：`Object`,具有scaleX和scaleY属性的对象
@@ -632,14 +683,6 @@ pointer|Object|选填|要操作的指针（而不是事件）
 originX|String|必填|横向起点: 'left', 'center' or 'right'
 originY|String|必填|垂直起点: 'top', 'center' or 'bottom'
 返回：`fabric.Point`
-
-### getRadiusX() 
-    返回对象的水平半径（根据对象的缩放比例)
-返回：`Number`
-
-### getRadiusY() 
-    返回对象的垂直半径（根据对象的缩放比例）
-返回：`Number`
 
 ### getScaledHeight() 
     返回对象边界框的高度，该对象的边界框计算了2.0之前的转换，并将其命名为getHeight（）的转换
@@ -665,11 +708,8 @@ style|Object|必填|从中检索样式属性的对象
 useWhiteSpace|Object|必填|在样式中包含附加属性的布尔值
 返回：`String`
 
-### getSvgStyles(skipShadow) 
-    返回svg-export的样式字符串
- 参数|类型|性质|描述
-|---|---|---|---
-skipShadow|Boolean|必填|跳过阴影滤镜输出的布尔值
+### getSvgStyles() → {String}
+    返回svg-export的样式字符串，组的特定版本
 返回：`String`
 
 ### getSvgTextDecoration(style) 
@@ -713,11 +753,28 @@ propertySet|String|必填|我们要保存的属性集的可选名称
     我们希望它是一种近似且快速的方法。为避免额外的缓存而编写的方法，它必须在发生笔划时返回true，可以以100％的机会猜测何时不会发生，如果它错过了笔划不可见的某些用例，则无所谓。
 返回：`Boolean`
 
-### initialize(optionsopt)
+### initialize(objects, optionsopt, isAlreadyGroupedopt) → {Object}
+
     初始化Constructor
  参数|类型|性质|描述
 |---|---|---|---
+objects|Object|必填|组对象
 options|Object|选填|选项对象
+isAlreadyGrouped|Boolean|选填|如果为true，则对象已被分组
+返回：`Object`
+
+### insertAt(object, index, nonSplicing) → {Self}
+    在指定的索引处将一个对象插入到集合中，然后渲染画布（如果`renderOnAddRemove`不是`false`），则该对象应该是fabric的一个实例（或继承自该对象）。
+    您可以使用insertAt方法添加一堆对象，但随后需要为Group类或position / bbox运行addWithUpdate调用将是错误的。
+ 参数|类型|性质|描述
+|---|---|---|---
+object|Object|必填|插入对象
+index|Number|必填|插入对象的索引
+nonSplicing|Boolean|必填|如果为true，则不会发生对象的拼接（移动）
+返回：`Self`
+
+
+
 
 ### intersectsWithObject(other, absoluteopt, calculateopt) 
     检查对象是否与其他对象相交
@@ -738,11 +795,8 @@ absolute|Boolean|选填|使用坐标而不使用 viewportTransform
 calculate|Boolean|选填|使用当前位置的坐标而不是.oCoords
 返回：`Boolean`，如果对象与2点形成的区域相交，则返回true
 
-### isCacheDirty(skipCanvas)
+### isCacheDirty()
     检查缓存是否脏
- 参数|类型|性质|描述
-|---|---|---|---
-skipCanvas|Boolean|必填|跳过画布检查，因为此对象已绘制在父画布上。
 
 ### isContainedWithinObject(other, absoluteopt, calculateopt) 
     检查对象是否完全包含在另一个对象的区域内
@@ -770,6 +824,14 @@ calculate|Boolean|选填|使用当前位置的坐标而不是.oCoords
 controlKey|String|必填|控制键。可能的值为“ tl”，“ tr”，“ br”，“ bl”，“ ml”，“ mt”，“ mr”，“ mb”，“ mtr”。
 返回：`Boolean`，如果指定的控件可见，则为 true，否则为 false
 
+### isEmpty() → {Boolean}
+    如果collection不包含任何对象，则返回true
+返回：`Boolean`，如果集合为空，则为true
+
+### isOnACache() → {Boolean}
+    递归检查此组或其父组是否正在缓存
+返回：`Boolean`
+
 ### isOnScreen(calculateopt) 
     检查对象是否包含在具有当前视口的画布中转换完成检查后会在屏幕上出现的第一点停止
  参数|类型|性质|描述
@@ -790,6 +852,13 @@ calculate|Boolean|选填|使用当前位置的坐标代替. aCoords
 |---|---|---|---
 type|String|必填|要检查的类型
 返回：`Boolean`
+
+### item(index) → {Self}
+    返回指定索引处的对象
+ 参数|类型|性质|描述
+|---|---|---|---
+index|Number|必填|
+返回：`Self`
 
 ### moveTo(index) 
     将对象移动到绘制对象堆栈中的指定级别
@@ -821,6 +890,27 @@ options
  参数|类型|性质|描述
 |---|---|---|---
 e|Event|选填|从上面的函数发送选项
+
+### realizeTransform(object) → {fabric.Object}
+    实现从该组到提供的对象的转换，即，它告诉您如果提供的对象在组中，然后销毁该组会发生什么。它使提供的对象变异。
+ 参数|类型|性质|描述
+|---|---|---|---
+object|fabric.Object|必填|
+返回：`fabric.Object`，转换对象
+
+### remove(…object) → {Self}
+    从集合中移除对象，然后渲染画布（如果`renderOnAddRemove`不是`false`）
+ 参数|类型|性质|描述
+|---|---|---|---
+object|fabric.Object|选填|零个或多个Fabric实例
+返回：`Self`，转换对象
+
+### removeWithUpdate(object) → {fabric.Group}
+    从组中删除对象；然后重新计算组的尺寸，位置。
+ 参数|类型|性质|描述
+|---|---|---|---
+object|Object|必填|
+返回：`fabric.Group`
 
 ### render(ctx)
     在指定的上下文中渲染对象
@@ -912,6 +1002,10 @@ visible|Boolean|必填|若要将指定的控件设置为可见，则为 true，�
 skipCorners|Boolean|选填|跳过oCoords的计算
 返回：`fabric.Object`
 
+### setObjectsCoords() → {fabric.Group}
+    设置组内所有对象的坐标 
+返回：`fabric.Group`
+
 ### setOnGroup()
     每当对象的父组的未委派属性发生更改时，该回调函数就会由该对象的父组调用。
     将键和值作为参数传递给它。不添加此函数的签名可避免Travis关于未使用变量的生成错误。
@@ -931,9 +1025,9 @@ originX|String|选填|横向起点：'left', 'center' or 'right'
 originY|String|选填|垂直起点：'top', 'center' or 'bottom'
 返回：`void`
 
-### setRadius() 
+<!-- ### setRadius() 
     设置对象的半径（并相应地更新宽度）
-返回：`fabric.Circle`
+返回：`fabric.Circle` -->
 
 ### setupState(optionsopt) 
     对象的设置状态
@@ -944,13 +1038,21 @@ options|Object|选填|保存状态时要包含带有附加“ stateProperties”
 
 ### shouldCache() 
     确定对象是否应该缓存。
-    创建自己的缓存级别objectCaching是一个全局标志，可以满足所有需求。当对象绘制方法需要缓存步骤时，应使用ItsOwnCache。没有一个结构类要求它。
-    通常，您不缓存组中的对象，因为缓存了外部的组。读取为：缓存（如果需要），或者是否已启用该功能，但我们尚未缓存。
+    创建自己的缓存级别需要时，当对象绘制方法需要缓存步骤时，应使用ItsOwnCache。没有一个结构类要求它。通
+    常，您不缓存组中的对象，因为该组已被缓存。
 返回：`Boolean`
+
+### size() → {Number}
+    返回集合的大小（即：包含其对象的数组的长度
+返回：`Number`
 
 ### straighten() 
     拉直物体（根据当前角度将其从当前角度旋转到0、90、180、270等之一）
 返回：`fabric.Object`
+
+### toActiveSelection() → {fabric.ActiveSelection}
+    将组设为活动选择，将组从画布中删除，该组必须在画布上才能起作用
+返回：`fabric.ActiveSelection`
 
 ### toCanvasElement(options) 
     将对象转换为HTMLCanvas元素
@@ -1031,7 +1133,7 @@ propertiesToInclude|Array|选填|您可能希望在输出中另外包含的所�
 返回：`Object`
 
 ### toString() 
-    返回实例的字符串表示形式
+    返回组的字符串表示形式
 返回：`String`
 
 ### toSVG(reviveropt) 
@@ -1076,6 +1178,10 @@ originX|String|选填|另一个横向起点：'left', 'center' or 'right'
 originY|String|选填|另一个垂直起点：'top', 'center' or 'bottom'
 返回：`fabric.Point`
 
+### ungroupOnCanvas() → {fabric.Group}
+    销毁一个组（恢复其对象的状态）
+返回：`fabric.Group`
+
 ### viewportCenter() 
     将对象在最后添加画布的当前视口上居中。
     居中后，您可能需要在对象上调用`setCoords`，以更新控件区域。
@@ -1090,7 +1196,7 @@ originY|String|选填|另一个垂直起点：'top', 'center' or 'bottom'
 返回：`fabric.Object`
 
 ### willDrawShadow() 
-    检查此对象或子对象是否将投射Group.shouldCache使用的阴影以知道子对象是否有递归阴影 
+    检查此对象或子对象是否会投射阴影 
 返回：`Boolean`
 
 
