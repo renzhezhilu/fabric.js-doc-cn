@@ -38,7 +38,7 @@ targetTexture|WebGLTexture|必填|应该绘制过滤输出的纹理
 context|WebGLRenderingContext|必填|用于渲染的GL上下文
 programCache|Object|必填|映射的着色器程序的映射，以过滤器类型为键。
 
-### applyTo2d(options)
+###   (options)
     将饱和度操作应用于表示图像像素的 Uint8ClampedArray
 参数|类型|性质|描述
 |---|---|---|---
