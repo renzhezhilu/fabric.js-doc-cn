@@ -1,6 +1,6 @@
 
 # fabric.Circle
-继承fabric.Object
+圆形，继承fabric.Object
 
 link：http://fabricjs.com/docs/fabric.Circle.html
 
@@ -358,7 +358,7 @@ link：http://fabricjs.com/docs/fabric.Circle.html
 ## 方法
 ### fromElement(element, callbackopt, optionsopt)
     静态方法
-    从一个 SVG 元素返回 fabric
+    从一个 SVG 元素返回 fabric.Circle
 参数|类型|性质|描述
 |---|---|---|---
 element|SVGElement|必填|要解析的元素

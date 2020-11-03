@@ -1,22 +1,14 @@
 
-# fabric.Path
-路径
+# fabric.Rect
+矩形，继承fabric.Object
 
-link：http://fabricjs.com/docs/fabric.Path.html
+link：http://fabricjs.com/docs/fabric.Rect.html
 
 ## 成员
-### (static) __uid :Number
-    创建SVG元素时在内部使用的唯一ID
-赋值类型：`Number`
-
-### (static, constant) NUM_FRACTION_DIGITS :Number
-    定义序列化对象值时要使用的小数位数。
-    您可以使用它来提高/降低诸如left，top，scaleX，scaleY等值的精度。
-赋值类型：`Number`
 
 ### ATTRIBUTE_NAMES
     静态方法
-    解析SVG元素时要考虑的属性名称列表（由fabric.Path.fromElement使用）
+    解析SVG元素时要考虑的属性名称列表（由fabric.Rect.fromElement使用）
 返回：``
 
 ### __corner 
@@ -111,10 +103,6 @@ link：http://fabricjs.com/docs/fabric.Path.html
     当设置为“ true”时，对象的缓存将在下一次渲染调用时重新渲染。从1.7.0开始
 赋值类型：`Boolean(true)`
 
-<!-- ### endAngle
-    圆弧形的结束角度，应为度，这是一个疏忽。
-    在下一个主要版本中可能会更改为度
-赋值类型：`Number` -->
 
 ### evented 
     设置为false时，对象不能成为事件的目标。所有事件都通过它传播。在v1.3.4中引入
@@ -255,19 +243,17 @@ link：http://fabricjs.com/docs/fabric.Path.html
     确定是先绘制填充还是笔划（“填充”或“笔划”之一）
 赋值类型：`String`
 
-### path :Array
-    路径点数组
-赋值类型：`Array`
-
-
-
 ### perPixelTargetFind
     设置为“ true”时，将在画布上以像素为单位“找到”对象，而不是根据边界框
 赋值类型：`Boolean`
 
-<!-- ### radius
-    圆的半径
-赋值类型：`Number` -->
+### rx :Number
+    水平边框半径
+赋值类型：`Number`
+
+### ry :Number
+    垂直边框半径
+赋值类型：`Number`
 
 ### scaleX
     对象缩放因子（水平）
@@ -298,10 +284,6 @@ link：http://fabricjs.com/docs/fabric.Path.html
     物体y轴上的偏斜角（以度为单位）
 赋值类型：`Number`
 
-<!-- ### startAngle
-    圆的起始角度，沿顺时针方向偏移，该角度应为度，这是一个疏忽。
-    在下一个主要版本中可能会更改为度
-赋值类型：`Number` -->
 
 ### statefullCache
     当为true时，检查对象属性的高速缓存无效。
@@ -359,7 +341,7 @@ link：http://fabricjs.com/docs/fabric.Path.html
 
 ### type
     对象的类型
-赋值类型：`String(path)`
+赋值类型：`String(rect)`
 
 ### visible
     设置为false时，对象不会在画布上渲染
@@ -370,25 +352,24 @@ link：http://fabricjs.com/docs/fabric.Path.html
 赋值类型：`Number`
 
 ## 方法
-### (static) fromElement(element, callback, optionsopt, callbackopt)
+### fromElement(element, callbackopt, optionsopt)
     静态方法
-    从SVG元素创建fabric.Path的实例
+    从一个 SVG 元素返回 fabric.Rect
 参数|类型|性质|描述
 |---|---|---|---
 element|SVGElement|必填|要解析的元素
-callback|function|选填|创建fabric.Path实例时调用的回调
+callback|function|选填|解析完成后调用的选项回调
 options|Object|选填|选项
-callbackopt|function|选填|解析完成后调用选项回调
 错误时返回：`Error`
 
 ### fromObject(object, callbackopt)
     静态方法
-    从对象创建fabric.Path的实例
+    从对象表示中返回fabric.Rect实例
 参数|类型|性质|描述
 |---|---|---|---
 object|Object|必填|对象创建实例
-callback|function|选填|创建fabric.Path实例时调用的回调
-<!-- 返回：`Object` -->
+callback|function|选填|创建fabric.Rect实例时调用的回调
+返回：`Object`
 
 ### _calcRotateMatrix() 
     计算对象的旋转矩阵
@@ -647,14 +628,6 @@ pointer|Object|选填|要操作的指针（而不是事件）
 originX|String|必填|横向起点: 'left', 'center' or 'right'
 originY|String|必填|垂直起点: 'top', 'center' or 'bottom'
 返回：`fabric.Point`
-<!-- 
-### getRadiusX() 
-    返回对象的水平半径（根据对象的缩放比例)
-返回：`Number`
-
-### getRadiusY() 
-    返回对象的垂直半径（根据对象的缩放比例）
-返回：`Number` -->
 
 ### getScaledHeight() 
     返回对象边界框的高度，该对象的边界框计算了2.0之前的转换，并将其命名为getHeight（）的转换
@@ -728,13 +701,12 @@ propertySet|String|必填|我们要保存的属性集的可选名称
     我们希望它是一种近似且快速的方法。为避免额外的缓存而编写的方法，它必须在发生笔划时返回true，可以以100％的机会猜测何时不会发生，如果它错过了笔划不可见的某些用例，则无所谓。
 返回：`Boolean`
 
-### initialize(path, optionsopt) → {fabric.Path}
+### initialize(optionsopt)
     初始化Constructor
  参数|类型|性质|描述
 |---|---|---|---
-path|Array 、 String	|必填|路径数据（坐标序列和相应的“命令”标记）
 options|Object|选填|选项对象
-返回：`fabric.Path`
+返回：`Object`
 
 ### intersectsWithObject(other, absoluteopt, calculateopt) 
     检查对象是否与其他对象相交
@@ -948,9 +920,6 @@ originX|String|选填|横向起点：'left', 'center' or 'right'
 originY|String|选填|垂直起点：'top', 'center' or 'bottom'
 返回：`void`
 
-<!-- ### setRadius() 
-    设置对象的半径（并相应地更新宽度）
-返回：`fabric.Circle` -->
 
 ### setupState(optionsopt) 
     对象的设置状态
