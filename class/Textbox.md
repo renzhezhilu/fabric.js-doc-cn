@@ -1,6 +1,9 @@
-# fabric.IText
+# fabric.Textbox
+    基于IText的Textbox类允许用户调整文本矩形的大小并自动换行。
+    文本框的Y缩放比例已锁定，用户只能更改宽度。高度会根据线的缠绕自动调整。
+继承`fabric.IText`
 
-可编辑文本,继承`fabric.Text`
+`⚠️ Textbox的api和IText完全一致`
 
 ## 快捷键
 
@@ -541,11 +544,11 @@ options|Object|选填|选项
 
 ### fromObject(object, callbackopt)
     静态方法
-    从对象表示形式返回fabric.IText实例
+    从对象表示形式返回fabric.Textbox实例
 参数|类型|性质|描述
 |---|---|---|---
 object|Object|必填|对象创建实例
-callback|function|选填|以新实例作为第一个参数调用
+callback|function|选填|创建fabric.Textbox实例时调用的回调
 返回：`Object`
 
 ### _calcRotateMatrix() 

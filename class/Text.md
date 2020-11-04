@@ -1,55 +1,17 @@
-# fabric.IText
+# fabric.Text
 
-可编辑文本,继承`fabric.Text`
-
-## 快捷键
-
-* ⌘ (command)在windows系统为 ctrl
-* ⌫ 表示删除键 
-
-用途|快捷键
-|---|---
-移动光标 | 左，右，上，下
-选择字符 | Shift + 左，Shift + 右
-垂直选择文字 | Shift + 上，Shift + 下
-按单词移动光标 | alt + 左​​，alt + 右
-选择单词 | shift + alt + 左，shift + alt + 右
-将光标移动到行的开始/结束 | ⌘ + 左，⌘ + 右 或home，end
-选择直到行的开始/结束 | ⌘ + Shift + 左，⌘ + Shift + 右 或Shift + Home，Shift + 结束
-跳转到文本的开头/结尾 | ⌘ + 上，⌘ + 下
-选择直到文本的开始/结束 | ⌘ + shift + 上，⌘ + shift + 下 或shift + pgUp，shift + pgDown
-删除字符 | ⌫
-删除单词 | alt + ⌫ 
-删除行  | ⌘ + ⌫ 
-转发删除 | ⌫ (delete)
-复制文字 | ⌘ + c
-粘贴文字 | ⌘ + v
-剪切文字 | ⌘ + x
-选择全文 | ⌘ + a
-退出编辑 | tab 或 ESC
-
-## 鼠标/触摸组合
-
-* `击`表示鼠标左键
-
-用途|组合
-|---|---
-位置光标 |单击/触摸
-创建选择 |单击/触摸并拖动
-创建选择 |单击并按住Shift +单击
-选择单词 |双击
-选择线 |三击
-
-## 事件
-名称|用途
-|---|---
-event:changed | 修改
-selection:changed | 选择
-editing:entered | 开始编辑
-editing:exited | 退出编辑
+文本,继承`fabric.Object`
 
 
 ## 成员
+
+### (static) ATTRIBUTE_NAMES
+    静态方法
+    解析SVG元素时要考虑的属性名称列表（由fabric.Text.fromElement使用）
+
+### (static) DEFAULT_SVG_FONT_SIZE
+    静态方法
+    默认SVG字体大小 
 
 ### __charBounds
     包含字符边界框
@@ -112,9 +74,9 @@ editing:exited | 退出编辑
     检查缓存是否需要刷新时要考虑的属性列表
 赋值类型：`Array`
 
-### caching :Boolean
+<!-- ### caching :Boolean
     指示是否可以缓存内部文本字符宽度
-赋值类型：`Boolean(true)`
+赋值类型：`Boolean(true)` -->
 
 ### centeredRotation
     设置为true时，通过控件旋转时，此对象将使用中心点作为变换的原点。
@@ -162,7 +124,7 @@ editing:exited | 退出编辑
 ### cornerStyle
     指定控制方式，“矩形”或“圆形”
 赋值类型：`String`
-
+<!-- 
 ### ctrlKeysMapDown
     有关keyDown + ctrl 、cmd的功能指令
 
@@ -185,7 +147,7 @@ editing:exited | 退出编辑
 
 ### cursorWidth :Number
     光标宽度（以像素为单位）
-赋值类型：`Number(2)`
+赋值类型：`Number(2)` -->
 
 ### deltaY :Number
     基线偏移（仅偏移），主要文本对象保持为0
@@ -195,13 +157,13 @@ editing:exited | 退出编辑
     当设置为“ true”时，对象的缓存将在下一次渲染调用时重新渲染。从1.7.0开始
 赋值类型：`Boolean(true)`
 
-### editable :Boolean
+<!-- ### editable :Boolean
     指示是否可以编辑文本
 赋值类型：`Boolean(true)`
 
 ### editingBorderColor :String
     文本对象处于编辑模式时的边框颜色 
-赋值类型：`String(rgba(102,153,255,0.25))`
+赋值类型：`String(rgba(102,153,255,0.25))` -->
 <!-- ### endAngle
     圆弧形的结束角度，应为度，这是一个疏忽。
     在下一个主要版本中可能会更改为度
@@ -271,22 +233,22 @@ editing:exited | 退出编辑
     如果为false，则默认对象的值不包含在其序列化中
 赋值类型：`Boolean`
 
-### inCompositionMode
-    帮助确定文本的撰写时间，以便更改光标的呈现方式
+<!-- ### inCompositionMode
+    帮助确定文本的撰写时间，以便更改光标的呈现方式 -->
 
 ### inverted 
     仅在将对象用作clipPath时才有意义。如果为true，则clipPath将使对象从2.4.0版本开始剪辑到clipPath的外部
 赋值类型：`Boolean`
-
+<!-- 
 ### isEditing :Boolean
     指示文本是否处于编辑模式
-赋值类型：`Boolean`
+赋值类型：`Boolean` -->
 
-### keysMap
+<!-- ### keysMap
     对于keyDown上的功能，将特殊键映射到实例/原型的功能如果ESC或TAB或箭头需要不同的行为，则必须更改此映射，以设置在结构上构建的功能的名称。
     原型。除非您仅需要一些文本实例，否则映射更改将影响所有实例，在这种情况下，您必须克隆此对象并分配您的实例。
     this.keysMap = fabric.util.object.clone（this.keysMap）;
-    该函数必须在fabric.Itext.prototype.myFunction中，并且将以args [0]的形式接收事件
+    该函数必须在fabric.Itext.prototype.myFunction中，并且将以args [0]的形式接收事件 -->
 
 ### left
     对象的左侧位置。请注意，默认情况下，它是相对于左侧的对象。您可以通过设置originX = {left / center / right}来更改此设置
@@ -413,7 +375,7 @@ editing:exited | 退出编辑
     不能与globalCompositeOperation方法混合使用
 赋值类型：`String`
 
-### selectionColor :String
+<!-- ### selectionColor :String
     文字选择的颜色
 赋值类型：`String(rgba(17,119,255,0.3))`
 
@@ -423,7 +385,7 @@ editing:exited | 退出编辑
 
 ### selectionStart :Number
     文本选择开始的索引（或无选择时光标所在的位置）
-赋值类型：`Number`
+赋值类型：`Number` -->
 
 ### shadow
     表示此形状阴影的阴影对象。向后不兼容说明：此属性在v1.2.11之前被命名为“ textShadow”（字符串）
@@ -514,7 +476,7 @@ editing:exited | 退出编辑
 
 ### type
     对象的类型
-赋值类型：`String('i-text')`
+赋值类型：`String('text')`
 
 ### underline :Boolean
     下划线
@@ -529,23 +491,23 @@ editing:exited | 退出编辑
 赋值类型：`Number`
 
 ## 方法
-<!-- ### fromElement(element, callbackopt, optionsopt)
+### fromElement(element, callbackopt, optionsopt)
     静态方法
-    从一个 SVG 元素返回 fabric
+    从SVG元素返回fabric.Text实例（尚未实现）
 参数|类型|性质|描述
 |---|---|---|---
 element|SVGElement|必填|要解析的元素
 callback|function|选填|解析完成后调用的选项回调
 options|Object|选填|选项
-错误时返回：`Error` -->
+错误时返回：`Error`
 
 ### fromObject(object, callbackopt)
     静态方法
-    从对象表示形式返回fabric.IText实例
+    从对象表示形式返回fabric.Text实例
 参数|类型|性质|描述
 |---|---|---|---
 object|Object|必填|对象创建实例
-callback|function|选填|以新实例作为第一个参数调用
+callback|function|选填|创建fabric.Text实例时调用的回调
 返回：`Object`
 
 ### _calcRotateMatrix() 
@@ -570,13 +532,13 @@ absolute|Boolean|必填|如果为 true 或 lineCoords，则返回 aCoords
 styleObject|Object|选填|对象
 返回：`String`，为画布上下文格式化的字体声明
     
-### _getSelectionForOffset(e, isRight) → {Number}
+<!-- ### _getSelectionForOffset(e, isRight) → {Number}
     private帮助查找偏移量应从“开始”还是“结束”算起
 参数|类型|性质|描述
 |---|---|---|---
 e|Event|必填|事件对象
 isRight|Boolean|必填|
-返回：`Number`
+返回：`Number` -->
 
 ### _getStyleDeclaration(lineIndex, charIndex) → {Object}
     获取给定字符的样式对象的引用，而不是其克隆
@@ -608,7 +570,7 @@ d
 |---|---|---|---
 lineIndex|Number|必填|
 返回：`object.width,object.widthOfSpaces`,object.width字符的总宽度,object.widthOfSpaces与此匹配的字符的长度。_reSpacesAndTabs
-
+<!-- 
 ### _mouseDownHandler()
     可以重写_mouseDown所需的基本功能的默认事件处理程序，以执行其他操作。
     此实现的范围是：找到单击位置，设置selectionStart，找到selectionEnd，初始化光标或选择区域的图形，在文本区域上初始化mousedDown将取消fabricjs对当前compositionMode的了解。它将设置为false。
@@ -629,7 +591,7 @@ e|Event|必填|事件对象
 参数|类型|性质|描述
 |---|---|---|---
 direction|String|必填|'Up' or 'Down'
-e|Event|必填|事件对象
+e|Event|必填|事件对象 -->
 
 ### _removeCacheCanvas()
     从对象中删除cacheCanvas及其尺寸
@@ -663,8 +625,8 @@ text|String|必填|文字分割
 reviver|function|选填|进一步解析svg表示的方法。
 返回：`String`，实例的svg表示
 
-### abortCursorAnimation()
-    中止光标动画并清除所有超时
+<!-- ### abortCursorAnimation()
+    中止光标动画并清除所有超时 -->
 
 ### adjustPosition(to)
     调整位置
@@ -729,8 +691,8 @@ skipGroup|Boolean|选填|返回对象的变换矩阵，不计入父变换在某�
 |---|---|---|---
 property|string|选填|在字符和文本之间进行比较的属性
 
-### clearContextTop()
-    准备并清理上下文
+<!-- ### clearContextTop()
+    准备并清理上下文 -->
 
 ### clone(callback, propertiesToIncludeopt)
     使用回调方法克隆实例将适用于每个对象。
@@ -777,7 +739,7 @@ absolute|Boolean|选填| 使用不带viewportTransform的坐标
 calculate|Boolean|选填|使用当前位置的坐标而不是.oCoords
 返回：`Boolean`，如果点在对象内，则为true
 
-### copy(e)
+<!-- ### copy(e)
     复制所选文本
 参数|类型|性质|描述
 |---|---|---|---
@@ -785,7 +747,7 @@ e|Event|必填|时间对象
 
 ### doubleClickHandler()
     双击的默认处理程序，选择一个单词
-
+ -->
 
 ### drawBorders(ctx, styleOverride)
     绘制对象边界框的边界。需要公共属性：宽度，高度需要公共选项：padding，borderColor
@@ -840,7 +802,7 @@ ctx|CanvasRenderingContext2D|必填|要渲染的上下文
 
 ### enlargeSpaces()
     扩大空间框并移动其他框
-
+<!-- 
 ### enterEditing() → {fabric.IText}
     进入编辑状态 
 返回：`fabric.IText`
@@ -883,7 +845,7 @@ startFrom|Number|必填|当前选择指数
 |---|---|---|---
 eventName|String|必填|事件名称触发
 options|Object|选填|选项对象
-返回：`Self`
+返回：`Self` -->
 
 ### forEachControl(fn)
     为每个控件调用一个函数。该函数通过控件被调用，该对象正在调用迭代器和控件的键
@@ -891,11 +853,11 @@ options|Object|选填|选项对象
 |---|---|---|---
 fn|function|必填|函数在控件上迭代
 
-### fromGraphemeToStringSelection()
+<!-- ### fromGraphemeToStringSelection()
     从结构转换为textarea值
 
 ### fromStringToGraphemeSelection()
-    从textarea转换为字素索引
+    从textarea转换为字素索引 -->
 
 ### fxStraighten(callbacks)
     与fabric.Object.prototype.straighten相同，但带有动画
@@ -940,7 +902,7 @@ charIndex|Number|必填|字符在行上的位置
 ### getCoords() 
     返回相交的正确坐标集，这将返回aCoords或lineCoords。坐标以数组形式返回。
 返回：`Array`,[tl, tr, br, bl] of points
-
+<!-- 
 ### getCurrentCharColor() → {String}
     高级功能可了解光标的颜色。 
     currentChar是光标之前的那个char返回当前光标处char的颜色（填充），未使用该库，供最终用户使用
@@ -958,7 +920,7 @@ charIndex|Number|必填|字符在行上的位置
 |---|---|---|---
 e|Event|必填|事件对象
 isRight|Boolean|必填|
-返回：`Number`
+返回：`Number` -->
 
 ### getHeightOfChar(line, _char) → {Number}
     计算给定位置的字符高度
@@ -1024,7 +986,7 @@ originY|String|必填|垂直起点: 'top', 'center' or 'bottom'
 ### getScaledWidth() 
     返回对象边界框的宽度，该宽度计数2.0之前的名为getWidth（）的转换
 返回：`Number`，宽度值
-
+<!-- 
 ### getSelectedText() → {String}
     返回所选文本
 返回：`String`
@@ -1034,7 +996,7 @@ originY|String|必填|垂直起点: 'top', 'center' or 'bottom'
 参数|类型|性质|描述
 |---|---|---|---
 e|Event|必填|事件对象
-返回：`Number`，字符索引
+返回：`Number`，字符索引 -->
 
 ### getSelectionStyles(startIndexopt, endIndexopt, completeopt) → {Array}
     如果未提供startIndex或endIndex，则获取当前选择项/光标的样式（在开始位置），将使用slectionStart或selectionEnd。
@@ -1085,14 +1047,14 @@ skipShadow|Boolean|必填|完整转换或单个对象之一
 ### getTotalObjectScaling() 
     返回对象比例因子，还计算组比例，缩放和视网膜
 返回：`Object`，具有scaleX和scaleY属性的对象
-
+<!-- 
 ### getUpCursorOffset(e, isRight) → {Number}
     获取光标偏移
  参数|类型|性质|描述
 |---|---|---|---
 e|Event|必填|事件对象
 isRight|Boolean|必填|事件对象
-返回：`Number`
+返回：`Number` -->
 
 ### getValueOfPropertyAt(lineIndex, charIndex, property)
     检索给定字符位置的属性值
@@ -1126,7 +1088,7 @@ propertySet|String|必填|我们要保存的属性集的可选名称
     不考虑文本样式。这只是渲染时使用的快捷方式。
     我们希望它是一种近似且快速的方法。为避免额外的缓存而编写的方法，它必须在发生笔划时返回true，可以以100％的机会猜测何时不会发生，如果它错过了笔划不可见的某些用例，则无所谓。
 返回：`Boolean`
-
+<!-- 
 ### initAddedHandler()
     初始化“添加的”事件处理程序
 
@@ -1146,38 +1108,18 @@ propertySet|String|必填|我们要保存的属性集的可选名称
     初始化“ dbclick”双击事件处理程序
 
 ### initHiddenTextarea()
-    初始化隐藏的文本区域（需要在iOS中调出键盘）
+    初始化隐藏的文本区域（需要在iOS中调出键盘） -->
 
+### initDimensions()
+    初始化或更新文本尺寸。用适当的值更新this.width和this.height。不返回尺寸。
 
-### initialize(text, optionsopt) → {fabric.IText}
+### initialize(text, optionsopt) → {fabric.Text}
     初始化Constructor
  参数|类型|性质|描述
 |---|---|---|---
 text|String|必填|字符串
 options|Object|选填|选项对象
-返回：`fabric.IText`
-
-### initMousedownHandler()
-    初始化“ mousedown”事件处理程序
-
-### initMouseMoveHandler()
-    初始化“ mousemove”事件处理程序 
-
-### initMouseupHandler()
-    初始化“ mouseup”事件处理程序 
-
-### insertChars(text, style, start, end)
-    在开始位置之前的开始位置插入字符。
-    开始等于1，表示如果提供样式数组，则文本将插入到实际字素0和1之间；
-    如果提供了end，且其长度大于开始，则必须与字素中的文本长度相同，并替换旧文本。 _text数组中每个字素位置的开始/结束位置。
- 参数|类型|性质|描述
-|---|---|---|---
-text|String|必填|要插入的文字
-style|Array|必填|样式对象数组
-start|Number|必填|
-end|Number|必填|默认开始+ 1
-
-
+返回：`fabric.Text`
 
 ### intersectsWithObject(other, absoluteopt, calculateopt) 
     检查对象是否与其他对象相交
@@ -1275,7 +1217,7 @@ lineIndex|Number|必填|行数
     检测线条是否有换行符，因此在移动和计数样式时需要考虑它。
     它始终返回text和itext。
 返回：`Number`
-
+<!-- 
 ### moveCursorDown(e)
     向下移动光标
  参数|类型|性质|描述
@@ -1334,7 +1276,7 @@ offset|Number|必填|坐标
     移动光标
  参数|类型|性质|描述
 |---|---|---|---
-offset|Number|必填|坐标
+offset|Number|必填|坐标 -->
 
 ### moveTo(index) 
     将对象移动到绘制对象堆栈中的指定级别
@@ -1346,12 +1288,12 @@ index|Number|必填|对象的新位置
 ### needsItsOwnCache()
     设置为true时，强制对象具有自己的缓存，即使它在组中，当对象在缓存上以特定方式运行并且始终需要自己的隔离画布才能正确呈现时，也可能需要该对象。创建自1.7.12起被覆盖
 返回：`Boolean`
-
+<!-- 
 ### onCompositionEnd()
     构图结束
 
 ### onCompositionStart()
-    构图开始
+    构图开始 -->
 
 ### onDeselect(optionsopt)
     每次_discardActiveObject或_setActiveObject尝试取消选择此对象时，都会调用此回调函数。如果函数返回true，则该过程被取消
@@ -1362,7 +1304,7 @@ options
  参数|类型|性质|描述
 |---|---|---|---
 e|Event|选填|从上面的函数发送选项
-
+<!-- 
 ### onInput(e)
     处理onInput事件
  参数|类型|性质|描述
@@ -1379,7 +1321,7 @@ e|Event|选填|事件对象
     处理keyup事件我们处理KeyUp，因为如果触发了复制/剪切事件，则ie11和edge难以复制/粘贴，因此keyup被取消
 参数|类型|性质|描述
 |---|---|---|---
-e|Event|选填|事件对象
+e|Event|选填|事件对象 -->
 
 
 ### onSelect(optionsopt)
@@ -1391,7 +1333,7 @@ options
  参数|类型|性质|描述
 |---|---|---|---
 e|Event|选填|从上面的函数发送选项
-
+<!-- 
 ### paste(e)
     粘贴文字
 参数|类型|性质|描述
@@ -1404,7 +1346,7 @@ options
  参数|类型|性质|描述
 |---|---|---|---
 start|Number|必填|
-start|end|必填|默认开始+ 1
+start|end|必填|默认开始+ 1 -->
 
 ### removeStyle(props)
     从文本对象中所有单个字符样式中删除一个或多个样式属性。
@@ -1413,7 +1355,7 @@ start|end|必填|默认开始+ 1
  参数|类型|性质|描述
 |---|---|---|---
 props|String|必填|从字符样式中删除的属性
-
+<!-- 
 ### removeStyleFromTo(start, end)
     从头到尾删除并重排样式块。
  参数|类型|性质|描述
@@ -1438,13 +1380,20 @@ ctx|CanvasRenderingContext2D|必填|可以转换的上下文
 |---|---|---|---
 boundaries|Object|必填|具有left / top / leftOffset / topOffset的对象
 ctx|CanvasRenderingContext2D|必填|可以转换的上下文
-
+ -->
 
 <!-- ### render(ctx)
     在指定的上下文中渲染对象
  参数|类型|性质|描述
 |---|---|---|---
 ctx|CanvasRenderingContext2D|必填|要渲染的上下文 -->
+
+### render(ctx)
+    在指定的上下文中渲染对象
+ 参数|类型|性质|描述
+|---|---|---|---
+ctx|CanvasRenderingContext2D|必填|要渲染的上下文
+
 
 ### rotate(angle) 
     设置实例的中心旋转“角度”
