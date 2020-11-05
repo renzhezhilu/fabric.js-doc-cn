@@ -1432,7 +1432,7 @@ value|Number|必填|新的高度
 absolute|Boolean|必填|忽略视口
 返回：`fabric.Object`
 
-
+<!-- 
 ### searchWordBoundary(selectionStart, direction) → {Number}
     查找与单词开头或结尾相对应的索引
  参数|类型|性质|描述
@@ -1458,8 +1458,8 @@ selectionStart|Number|必填|字符索引
  参数|类型|性质|描述
 |---|---|---|---
 selectionStart|Number|必填|字符索引
-<!-- 返回：`fabric.IText` -->
 
+ -->
 
 
 
@@ -1522,11 +1522,11 @@ visible|Boolean|必填|若要将指定的控件设置为可见，则为 true，�
 skipCorners|Boolean|选填|跳过oCoords的计算
 返回：`fabric.Object`
 
-### setCursorByClick(e)
+<!-- ### setCursorByClick(e)
     根据传递的指针（x / y）对象更改文本中的光标位置
  参数|类型|性质|描述
 |---|---|---|---
-e|Event|选填|事件对象
+e|Event|选填|事件对象 -->
 
 ### setOnGroup()
     每当对象的父组的未委派属性发生更改时，该回调函数就会由该对象的父组调用。
@@ -1546,7 +1546,7 @@ pos|fabric.Point|选填|物体的新位置
 originX|String|选填|横向起点：'left', 'center' or 'right'
 originY|String|选填|垂直起点：'top', 'center' or 'bottom'
 返回：`void`
-
+<!-- 
 ### setSelectionEnd(index)
     设置选择结束（选择的右边界）
  参数|类型|性质|描述
@@ -1560,7 +1560,7 @@ index|Number|必填|设置选择结束的索引
 index|Number|必填|设置选择开始的索引
 
 ### setSelectionStartEndWithShift()
-    根据光标模仿按键的新位置设置selectionStart和selectionEnd-按下shift键时的鼠标导航。
+    根据光标模仿按键的新位置设置selectionStart和selectionEnd-按下shift键时的鼠标导航。 -->
 
 ### setSelectionStyles(stylesopt, startIndexopt, endIndexopt) → {fabric.IText}
     设置当前选择的样式，如果不存在选择，则不进行任何设置。
@@ -1599,14 +1599,14 @@ end|Number|必填|选择结束
 |---|---|---|---
 options|Object|选填|保存状态时要包含带有附加“ stateProperties”数组的对象
 返回：`fabric.Object`
-
+<!-- 
 ### shiftLineStyles(lineIndex, offset)
     向上或向下移动线型
  参数|类型|性质|描述
 |---|---|---|---
 lineIndex|Number|必填|行的索引 
 offset|Number|必填|可以数字吗？
-返回：`fabric.Text`
+返回：`fabric.Text` -->
 
 
 ### shouldCache() 
@@ -1752,10 +1752,10 @@ center|fabric.Point|必填|与物体中心相对应的点
 originX|String|选填|另一个横向起点：'left', 'center' or 'right'
 originY|String|选填|另一个垂直起点：'top', 'center' or 'bottom'
 返回：`fabric.Point`
-
+<!-- 
 ### tripleClickHandler()
     双击的默认处理程序，选择一行
-
+ -->
 
 
 ### viewportCenter() 
