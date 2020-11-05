@@ -342,3 +342,221 @@ transform|Array|选填|代表2x3转换矩阵的6个数字组成的数组
 tagName|String|必填|要创建的元素的类型(标签)
 attributes|Object|选填|要在元素上设置的属性
 返回：`HTMLElement`，新创建的元素
+
+### (static) makeElementSelectable(element) → {HTMLElement}
+    使元素可选
+参数|类型|性质|描述
+|---|---|---|---
+element|HTMLElement|必填|要选择的元素
+返回：`HTMLElement`，传入的元素
+
+### (static) makeElementUnselectable(element) → {HTMLElement}
+    使元素不可选择
+参数|类型|性质|描述
+|---|---|---|---
+element|HTMLElement|必填|不可选择的元素
+返回：`HTMLElement`，传入的元素
+
+### (static) matrixToSVG(trasnform) → {String|Object.y}
+    给定一个由6个数字组成的数组，则返回类似““ matrix（... numbers）”`之类的东西
+参数|类型|性质|描述
+|---|---|---|---
+trasnform|Array|必填|具有6个数字的数组
+返回：`String`,SVG的转换矩阵  `Object.y`,受Y限制的尺寸
+
+### (static) multiplyTransformMatrices(a, b, is2x2) → {Array}
+    将矩阵A乘以矩阵B即可嵌套转换
+参数|类型|性质|描述
+|---|---|---|---
+a|Array|必填|第一个变换矩阵
+b|Array|必填|第二个变换矩阵
+is2x2|Boolean|必填|将该矩阵乘以2x2矩阵的标志
+返回：`Array`,两个变换矩阵的乘积
+
+### (static) parsePreserveAspectRatioAttribute(attribute) → {Object}
+    解析元素中的preserveAspectRatio(保留宽高比)属性 
+参数|类型|性质|描述
+|---|---|---|---
+attribute|string|必填|被解析
+返回：`Object`,包含align和MeetOrSlice属性的对象
+
+### (static) parseUnit(value, fontSize) → {Number|String}
+    如果适用，从属性值转换为像素值。返回转换后的像素或未转换的原始值。
+参数|类型|性质|描述
+|---|---|---|---
+value|Number 、 String|必填|要操作的号码
+fontSize|Number|必填|
+返回：`Number | String`
+
+### (static) populateWithProperties(source, destination) → {Array}
+    用另一个对象的属性填充一个对象
+参数|类型|性质|描述
+|---|---|---|---
+source|Object|必填|来源对象
+destination|Object|必填|目标对象
+返回：`Array`，属性要包含的属性名称
+
+### (static) qrDecompose(a) → {Object}
+    将标准2x3矩阵分解为变换分量
+参数|类型|性质|描述
+|---|---|---|---
+a|Array|必填|变换矩阵 transformMatrix
+返回：`Object`,变换的组成部分
+
+### (static) radiansToDegrees(radians) → {Number}
+    将弧度转换为度
+参数|类型|性质|描述
+|---|---|---|---
+radians|Number|必填|弧度值
+返回：`Number`
+
+### (static) removeFromArray(array, value) → {Array}
+    从数组中删除值。值的存在（及其在数组中的位置）是通过Array.prototype.indexOf确定的
+参数|类型|性质|描述
+|---|---|---|---
+radians|Number|必填|弧度值
+返回：`Array`,原始数组
+
+### (static) removeListener(element, eventName, handler)
+    从元素中删除事件监听器
+参数|类型|性质|描述
+|---|---|---|---
+element|HTMLElement|必填|
+eventName|String|必填|
+handler|function|必填|
+
+### (static) request(url, optionsopt) → {XMLHttpRequest}
+    发送请求的跨浏览器抽象
+参数|类型|性质|描述
+|---|---|---|---
+url|String|必填|发送请求到的URL
+options|Object|选填|
+options
+参数|类型|性质|默认值|描述
+|---|---|---|---
+method|String|选填|"GET"|发送请求到的URL
+parameters|String|选填||附加到GET或正文中url的参数
+body|String|选填||带有POST或PUT请求发送的正文
+onComplete|String|选填||请求完成后进行调用的回调
+返回：`XMLHttpRequest`
+
+
+### (static) requestAnimFrame(callback, element)
+    基于http://paulirish.com/2011/requestanimationframe-for-smart-animating/的requestAnimationFrame 
+    polyfill为了获取准确的开始时间，应调用`requestAnimFrame`作为该方法的条目
+参数|类型|性质|描述
+|---|---|---|---
+callback|function|必填|回调调用
+element|DOMElement|必填|与动画关联的可选元素
+
+### (static) resetObjectTransform(target)
+    将对象变换状态重置为中性。顶部和左侧不占
+参数|类型|性质|描述
+|---|---|---|---
+target|fabric.Object|必填|转换对象
+
+### (static) resolveNamespace(namespace) → {Object}
+    返回给定名称空间的对象
+参数|类型|性质|描述
+|---|---|---|---
+namespace|String|必填|命名空间字符串，例如'fabric.Image.filter'或'fabric'
+返回：`Object`，给定名称空间的对象（默认结构）
+
+### (static) rotatePoint(point, origin, radians) → {fabric.Point}
+    用“弧度”围绕“原点”旋转“点”(Rotates `point` around `origin` with `radians`
+)
+参数|类型|性质|描述
+|---|---|---|---
+point|fabric.Point|必填|旋转点
+origin|fabric.Point|必填|旋转原点
+radians|Number|必填|旋转角度的弧度
+返回：`fabric.Point`,新的旋转点
+
+### (static) rotateVector(vector, radians) → {Object}
+    用弧度旋转`vector`
+参数|类型|性质|描述
+|---|---|---|---
+vector|Object|必填|旋转向量（x和y）
+radians|Number|必填|旋转角度的弧度
+返回：`Object`，新的旋转点
+
+### (static) saveObjectTransform(target) → {Object}
+    提取对象变换值
+参数|类型|性质|描述
+|---|---|---|---
+target|fabric.Object|必填|读取对象
+返回：`Object`,变换的组成部分
+
+### (static) setStyle(element, styles) → {HTMLElement}
+    跨浏览器包装器，用于设置元素的样式
+参数|类型|性质|描述
+|---|---|---|---
+element|HTMLElement|必填|
+styles|Object|必填|
+返回：`HTMLElement`,作为第一个参数传递的元素
+
+### (static) sin(angle) → {Number}
+    计算角度的正弦，避免返回浮点数以获得已知结果
+参数|类型|性质|描述
+|---|---|---|---
+angle|Number|必填|以弧度或度为单位的角度
+返回：`Number`
+
+### (static) sizeAfterTransform(width, height, options) → {Object.x|Object.y}
+    在给定宽度和高度的情况下，返回边界框的大小，该边界框可以包含具有选项中描述的应用变换的宽度/高度的框。
+    用于计算控件对象周围的框。
+参数|类型|性质|描述
+|---|---|---|---
+width|Number|必填|
+height|Number|必填|
+options|Object|必填|
+options
+参数|类型|性质|描述
+|---|---|---|---
+scaleX|Number|必填|水平比例
+scaleY|Number|必填|垂直比例
+skewX|Number|必填|水平倾斜
+skewY|Number|必填|锤子倾斜
+返回：`Object.x`,容纳宽度 `Object.y`,容纳高度
+
+### (static) toArray(arrayLike) → {Array}
+    将类似数组的对象（例如，arguments或NodeList）转换为数组
+参数|类型|性质|描述
+|---|---|---|---
+arrayLike|Object|必填|水平
+返回：`Array`
+
+### (static) toDataURL(canvasEl, format, quality) → {String}
+    生成base64数据还是Blob url？,从2.6.0开始，它从canvas实例移至实用程序。
+参数|类型|性质|描述
+|---|---|---|---
+canvasEl|CanvasElement|必填|复制的大小和内容
+format|String|必填|'jpeg'或'png'，在某些浏览器中，'webp'也可以
+quality|Number|必填|0-1
+返回：`String`，数据网址
+
+### (static) toFixed(number, fractionDigits) → {Number}
+    Number＃toFixed周围的包装器，与本机方法相反，它返回数字，而不是字符串。
+参数|类型|性质|描述
+|---|---|---|---
+number|Number 、 String	|必填|要操作的号码
+fractionDigits|Number|必填|要“离开（leave）”的小数位数
+返回：`Number`
+
+### (static) transformPoint(p, t, ignoreOffsetopt) → {fabric.Point}
+    将变换t应用于点p
+参数|类型|性质|描述
+|---|---|---|---
+p|fabric.Point|必填|转变点
+t|Array|必填|转变
+ignoreOffset|Boolean|选填|指示不应应用偏移量
+返回：`fabric.Point`，转换点
+
+### (static) wrapElement(element, wrapper, attributesopt) → {HTMLElement}
+    用另一个元素包装元素
+参数|类型|性质|描述
+|---|---|---|---
+element|HTMLElement|必填|要包装的元素
+wrapper|HTMLElement 、 String|必填|要包装的元素
+attributes|Object|选填|在包装器上设置的属性
+返回：`HTMLElement`,包装纸
