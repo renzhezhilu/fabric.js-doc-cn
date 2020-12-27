@@ -1,0 +1,63 @@
+<h1 id="fabricpencilbrush">fabric.PencilBrush</h1>
+<p>铅笔笔刷</p>
+<h2 id="成员">成员</h2>
+<h3 id="color-string">color :String</h3>
+<pre><code>画笔的颜色</code></pre>
+<p>复制类型：<code>String(&#39;rgb(0, 0, 0)&#39;)</code></p>
+<h3 id="decimate-number">decimate :Number</h3>
+<pre><code>舍弃彼此相距小于“十进制”像素的点</code></pre>
+<p>复制类型：<code>Number(0.4)</code></p>
+<h3 id="shadow-fabricshadow">shadow :fabric.Shadow</h3>
+<pre><code>表示此形状阴影的阴影对象。向后不兼容注释：自v1.2.12以来，此属性替换“ shadowColor”（字符串），“ shadowOffsetX”（数字），“ shadowOffsetY”（数字）和“ shadowBlur”（数字）</code></pre>
+<p>复制类型：<code>fabric.Shadow</code></p>
+<h3 id="strokedasharray-array">strokeDashArray :Array</h3>
+<pre><code>笔划破折号数组</code></pre>
+<p>复制类型：<code>Array</code></p>
+<h3 id="strokelinecap-string">strokeLineCap :String</h3>
+<pre><code>笔刷的线尾样式（“对接 butt”，“圆形 round”，“正方形 square”之一）</code></pre>
+<p>复制类型：<code>String(&#39;round&#39;)</code></p>
+<h3 id="strokelinejoin-string">strokeLineJoin :String</h3>
+<pre><code>刷子的角样式（“斜角 bevel”，“圆形 round”，“斜角 miter”之一）</code></pre>
+<p>复制类型：<code>String(&#39;round&#39;)</code></p>
+<h3 id="strokemiterlimit-number">strokeMiterLimit :Number</h3>
+<pre><code>笔刷的最大斜接长度（用于strokeLineJoin =“ miter”）</code></pre>
+<p>复制类型：<code>Number(10)</code></p>
+<h3 id="width-number">width :Number</h3>
+<pre><code>画笔的宽度，必须是数字，没有字符串文字</code></pre>
+<p>复制类型：<code>Number(1)</code></p>
+<h2 id="方法">方法</h2>
+<h3 id="_drawsegmentpointer">_drawSegment(pointer)</h3>
+<pre><code>按下鼠标并移动鼠标时在内部调用</code></pre>
+<p>参数|类型|性质|描述
+|---|---|---|---
+pointer|Object|必填|</p>
+<h3 id="_finalizeandaddpath">_finalizeAndAddPath()</h3>
+<pre><code>在contextTop画布上绘制路径后，在mouseup上，
+我们使用捕获的点来创建新的结构路径对象并将其添加到结构画布。</code></pre>
+<h3 id="convertpointstosvgpathpoints-→-string">convertPointsToSVGPath(points) → {String}</h3>
+<pre><code>将点转换为SVG路径</code></pre>
+<p>参数|类型|性质|描述
+|---|---|---|---
+points|Array|必填|点数组
+返回：<code>String</code>,SVG 路径</p>
+<h3 id="createpathpathdata-→-fabricpath">createPath(pathData) → {fabric.Path}</h3>
+<pre><code>创建fabric.Path对象以添加到画布上</code></pre>
+<p>参数|类型|性质|描述
+|---|---|---|---
+pathData|String|必填|路径数据
+返回：<code>fabric.Path</code>,在画布上添加的路径</p>
+<h3 id="decimatepoints">decimatePoints()</h3>
+<pre><code>用十进制值抽取poins数组</code></pre>
+<h3 id="initializecanvas-→-fabricpencilbrush">initialize(canvas) → {fabric.PencilBrush}</h3>
+<pre><code>初始化</code></pre>
+<p>参数|类型|性质|描述
+|---|---|---|---
+canvas|fabric.Canvas|必填|
+返回：<code>fabric.PencilBrush</code>，铅笔刷的例子</p>
+<h3 id="onmousedownpointer">onMouseDown(pointer)</h3>
+<pre><code>鼠标按下时被调用</code></pre>
+<p>参数|类型|性质|描述
+|---|---|---|---
+pointer|Object|必填|</p>
+<h3 id="onmouseup">onMouseUp()</h3>
+<pre><code>鼠标松开时调用</code></pre>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>加入基础物件-fabric.js base demo</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <script src="../js/fabric.min.js"></script>
+    <script src="../js/vue.min.js"></script>
+    <!-- <script src="../js/jquery.min.js"></script> -->
+</head>
+
+<body>
+    <main id="app">
+        <h1>{{ message }}</h1>
+        <p>xxxxx</p>
+        <button>按钮</button>
+        <input type="text">
+        <select>
+            <option value="">222</option>
+            <option value="">33</option>
+            <option value="">33</option>
+        </select>
+        <input type="range">
+        <br>
+        <textarea name="" id="" cols="30" rows="10"></textarea>
+
+        <br>
+        <canvas id="fabricjsDocCn"></canvas>
+    </main>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                message: 'Hello Vue.js!'
+            },
+            created(){},
+            mounted(){},
+            updated(){},
+            methods:{},
+            computed:{},
+            watch:{}
+        })
+    </script>
+</body>
+<!-- from: https://github.com/renzhezhilu/fabric.js-doc-cn -->
+</html>

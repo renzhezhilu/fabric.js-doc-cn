@@ -1,26 +1,33 @@
-# fabric.Image.filters.Grayscale
-灰度图片滤镜
+# fabric.Image.filters.Noise
+噪点滤镜
 继承`fabric.Image.filters.BaseFilter`
+link： http://fabricjs.com/docs/fabric.Image.filters.Noise.html
 
 ``` javascript
-var filter = new fabric.Image.filters.Grayscale();
+var filter = new fabric.Image.filters.Noise({
+  noise: 700
+});
 object.filters.push(filter);
 object.applyFilters();
+canvas.renderAll();
 ```
 
 ## 成员
 
-### mode
-    灰度模式，介于“ average 平均”，“ lightness 亮度”，“ luminosity 发光度”之间
-默认值： `average`
+### fragmentSource
+    噪声程序的片段源
 
 ### mainParameter
     描述作为过滤器参数的属性 
-默认值：`gamma`
+默认值：`noise`
+
+### noise
+    噪声值
+
 
 ### type
     滤镜类型
-赋值类型： `Grayscale` 
+赋值类型： `Noise` 
 
 ## 方法
 

@@ -1,0 +1,49 @@
+<h1 id="fabricspraybrush">fabric.SprayBrush</h1>
+<p>喷雾笔刷</p>
+<h2 id="成员">成员</h2>
+<h3 id="density-number">density :Number</h3>
+<pre><code>喷雾密度（每块点数）</code></pre>
+<p>赋值类型：<code>Number(20)</code></p>
+<h3 id="dotwidth-number">dotWidth :Number</h3>
+<pre><code>喷点宽度</code></pre>
+<p>赋值类型：<code>Number(1)</code></p>
+<h3 id="dotwidthvariance-number">dotWidthVariance :Number</h3>
+<pre><code>喷点宽度变化</code></pre>
+<p>赋值类型：<code>Number(1)</code></p>
+<h3 id="optimizeoverlapping-boolean">optimizeOverlapping :Boolean</h3>
+<pre><code>是否应删除重叠的点（矩形）（出于性能原因）</code></pre>
+<p>赋值类型：<code>Boolean(true)</code></p>
+<h3 id="randomopacity-boolean">randomOpacity :Boolean</h3>
+<pre><code>点的不透明度是否应该是随机的</code></pre>
+<p>赋值类型：<code>Boolean</code></p>
+<h3 id="width-number">width :Number</h3>
+<pre><code>喷雾宽度</code></pre>
+<p>赋值类型：<code>Number(10)</code></p>
+<h2 id="方法">方法</h2>
+<h3 id="_render">_render()</h3>
+<pre><code>渲染所有喷雾块 </code></pre>
+<h3 id="addspraychunkpointer">addSprayChunk(pointer)</h3>
+<pre><code>添加喷雾块</code></pre>
+<p> 参数|类型|性质|描述
+|---|---|---|---
+pointer|Object|必填|</p>
+<h3 id="initializecanvas-→-fabricspraybrush">initialize(canvas) → {fabric.SprayBrush}</h3>
+<pre><code>初始化</code></pre>
+<p> 参数|类型|性质|描述
+|---|---|---|---
+canvas|fabric.Canvas|必填|</p>
+<p>返回：<code>fabric.SprayBrush</code>，喷枪实例</p>
+<h3 id="onmousedownpointer">onMouseDown(pointer)</h3>
+<pre><code>按下鼠标时调用</code></pre>
+<p> 参数|类型|性质|描述
+|---|---|---|---
+pointer|Object|必填|</p>
+<h3 id="onmousemovepointer">onMouseMove(pointer)</h3>
+<pre><code>移动鼠标时调用</code></pre>
+<p> 参数|类型|性质|描述
+|---|---|---|---
+pointer|Object|必填|</p>
+<h3 id="onmouseup">onMouseUp()</h3>
+<pre><code>鼠标松开时调用</code></pre>
+<h3 id="render">render()</h3>
+<pre><code>渲染新的喷雾刷</code></pre>

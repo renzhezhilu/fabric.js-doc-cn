@@ -1,0 +1,49 @@
+<h1 id="fabricellipse">fabric.Ellipse</h1>
+<p>大部分成员和方法与<code>fabric.Circle</code>相同</p>
+<h3 id="new-ellipse">new Ellipse()</h3>
+<p>返回：<code>fabric.Ellipse</code></p>
+<h2 id="与fabriccircle不同的：">与fabric.Circle不同的：</h2>
+<h3 id="type-string">type :String</h3>
+<pre><code>对象的类型</code></pre>
+<p>赋值类型：<code>String(ellipse)</code></p>
+<h3 id="rx-number">rx :Number</h3>
+<pre><code>水平半径</code></pre>
+<p>赋值类型：<code>Number</code></p>
+<h3 id="ry-number">ry :Number</h3>
+<pre><code>垂直半径</code></pre>
+<p>赋值类型：<code>Number</code></p>
+<h3 id="static-fromelementelement-callbackopt">(static) fromElement(element, callbackopt)</h3>
+<pre><code>从 SVG 元素返回 fabric.Ellipse实例</code></pre>
+<p>参数|类型|性质|描述
+|---|---|---|---
+element|SVGElement|必填|要解析的元素
+callback|function|选填|解析完成后调用的选项回调
+返回：<code>fabric.Ellipse</code></p>
+<h3 id="static-fromobjectobject-callbackopt">(static) fromObject(object, callbackopt)</h3>
+<pre><code>从对象表示形式返回 fabric.Ellipse实例</code></pre>
+<p>参数|类型|性质|描述
+|---|---|---|---
+object|Object|必填|对象创建实例
+callback|function|选填|以新实例作为第一个参数调用
+返回：<code>fabric.Ellipse</code></p>
+<h3 id="getrx">getRx()</h3>
+<pre><code>返回对象的水平半径(根据对象的缩放方式)</code></pre>
+<p>返回：<code>Number</code></p>
+<h3 id="getry">getRy()</h3>
+<pre><code>返回对象的垂直半径(根据对象的缩放方式)</code></pre>
+<p>返回：<code>Number</code></p>
+<h3 id="initializeoptionsopt">initialize(optionsopt)</h3>
+<pre><code>初始化Constructor</code></pre>
+<p> 参数|类型|性质|描述
+|---|---|---|---
+options|Object|选填|选项对象
+返回：<code>fabric.Ellipse</code></p>
+<h2 id="与fabriccircle相比没有的：">与<code>fabric.Circle</code>相比没有的：</h2>
+<ul>
+<li>endAngle :Number 圆弧形的结束角度</li>
+<li>radius :Number 圆的半径</li>
+<li>startAngle :Number 圆的起始角度</li>
+<li>getRadiusX() → {Number} 返回对象的水平半径</li>
+<li>getRadiusY() → {Number} 返回对象的垂直半径</li>
+<li>setRadius() → {fabric.Circle} 设置对象的半径</li>
+</ul>

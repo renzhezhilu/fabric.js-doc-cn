@@ -1,0 +1,60 @@
+<h1 id="fabric-pattern">fabric. Pattern</h1>
+<p>图案</p>
+<p>link：http://fabricjs.com/docs/fabric.Pattern.html</p>
+<h2 id="示例">示例</h2>
+<pre><code class="language-javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">loadPattern</span>(<span class="hljs-params">url</span>) </span>{
+    fabric.util.loadImage(url, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">img</span>) </span>{
+        text.set(<span class="hljs-string">&#x27;fill&#x27;</span>, <span class="hljs-keyword">new</span> fabric.Pattern({
+            <span class="hljs-attr">source</span>: img,
+            <span class="hljs-attr">repeat</span>: <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&#x27;repeat&#x27;</span>).value
+        }));
+        shape.set(<span class="hljs-string">&#x27;fill&#x27;</span>, <span class="hljs-keyword">new</span> fabric.Pattern({
+            <span class="hljs-attr">source</span>: img,
+            <span class="hljs-attr">repeat</span>: <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&#x27;repeat&#x27;</span>).value
+        }));
+        canvas.renderAll();
+    });
+}</code></pre>
+<h2 id="成员">成员</h2>
+<h3 id="crossorigin--string">crossOrigin : String</h3>
+<pre><code>交叉原点的至，(one of &quot;&quot;, &quot;anonymous&quot;, &quot;use-credentials&quot;)</code></pre>
+<p>赋值类型： <code>String</code> </p>
+<h3 id="offsetx--number">offsetX : Number</h3>
+<pre><code>与对象左/上角的图案水平偏移</code></pre>
+<p>赋值类型： <code>Number</code> </p>
+<h3 id="offsety--number">offsetY : Number</h3>
+<pre><code>图案与对象左/上角的垂直偏移</code></pre>
+<p>赋值类型： <code>Number</code> </p>
+<h3 id="patterntransform--array">patternTransform : Array</h3>
+<pre><code>转换矩阵以更改从SVG导入的模式。</code></pre>
+<p>赋值类型： <code>Array</code> </p>
+<h3 id="repeat--string">repeat : String</h3>
+<pre><code>模式的重复属性，(one of repeat, repeat-x, repeat-y or no-repeat)</code></pre>
+<p>赋值类型： <code>String(&#39;repeat&#39;)</code> </p>
+<h2 id="方法">方法</h2>
+<h3 id="initializeoptionsopt-callbackopt-→-fabric-pattern">initialize(optionsopt, callbackopt) → {fabric. Pattern}</h3>
+<pre><code>初始化</code></pre>
+<p> 参数|类型|性质|描述
+|---|---|---|---
+options|Object|选填|选项对象
+callback|function|选填|回调初始化后调用的函数。
+返回： <code>fabric.Pattern</code> </p>
+<h3 id="tolivectx-→-canvaspattern">toLive(ctx) → {CanvasPattern}</h3>
+<pre><code>返回CanvasPattern的实例</code></pre>
+<p> 参数|类型|性质|描述
+|---|---|---|---
+ctx|CanvasRenderingContext2D|必填|上下文创建模式
+返回： <code>CanvasPattern</code> </p>
+<h3 id="toobjectpropertiestoincludeopt-→-object">toObject(propertiesToIncludeopt) → {Object}</h3>
+<pre><code>返回模式的对象表示</code></pre>
+<p>参数|类型|性质|描述
+|---|---|---|---
+propertiesToInclude|Array|选填|您可能希望在输出中另外包含的所有属性
+返回： <code>Object</code> </p>
+<h3 id="tosvgobject-→-string">toSVG(object) → {String}</h3>
+<h3 id="tosvgreviveropt">toSVG(reviveropt)</h3>
+<pre><code>返回画布的SVG表示形式</code></pre>
+<p>参数|类型|性质|描述
+|---|---|---|---
+object|fabric. Object|选填|SVG表示的进一步解析方法
+返回： <code>String</code> ，实例的 svg 表示</p>

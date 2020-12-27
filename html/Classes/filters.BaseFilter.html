@@ -1,0 +1,103 @@
+<h1 id="fabricimagefiltersbasefilter">fabric.Image.filters.BaseFilter</h1>
+<p>基础过滤器，根过滤器类，所有过滤器类都从该根过滤器类继承</p>
+<h2 id="成员">成员</h2>
+<h3 id="type">type</h3>
+<pre><code>过滤器类型</code></pre>
+<p>赋值类型：<code>BaseFilter</code></p>
+<h2 id="方法">方法</h2>
+<h3 id="applytooptions">applyTo(options)</h3>
+<pre><code>此过滤器应用于提供的输入图像数据。根据options.webgl标志确定使用WebGL还是Canvas2D</code></pre>
+<p>参数|类型|性质|描述
+|---|---|---|---
+options|Object|必填|
+options
+参数|类型|性质|描述
+|---|---|---|---
+passes|Number|必填|剩余要执行的过滤器数
+webgl|Boolean|必填|是否使用webgl渲染过滤器
+sourceTexture|WebGLTexture|必填|纹理设置为要过滤的源
+targetTexture|WebGLTexture|必填|应该绘制过滤输出的纹理
+context|WebGLRenderingContext|必填|用于渲染的GL上下文
+programCache|Object|必填|映射的着色器程序的映射，以过滤器类型为键。</p>
+<h3 id="applytowebgloptions">applyToWebGL(options)</h3>
+<pre><code>使用webgl应用此过滤器。</code></pre>
+<p>参数|类型|性质|描述
+|---|---|---|---
+options|Object|必填|
+options
+参数|类型|性质|描述
+|---|---|---|---
+passes|Number|必填|剩余要执行的过滤器数
+webgl|Boolean|必填|是否使用webgl渲染过滤器
+originalTexture|WebGLTexture|必填|原始输入图像的纹理
+sourceTexture|WebGLTexture|必填|纹理设置为要过滤的源
+targetTexture|WebGLTexture|必填|应该绘制过滤输出的纹理
+context|WebGLRenderingContext|必填|用于渲染的GL上下文
+programCache|Object|必填|映射的着色器程序的映射，以过滤器类型为键。</p>
+<h3 id="createhelplayer">createHelpLayer()</h3>
+<pre><code>如果2D滤镜需要，此函数可以创建要使用的辅助画布，请记住，options.targetCanvas可以使用到链结束。</code></pre>
+<h3 id="createprogramgl-fragmentsource-vertexsource">createProgram(gl, fragmentSource, vertexSource)</h3>
+<pre><code>编译此滤镜的着色器程序</code></pre>
+<p>参数|类型|性质|描述
+|---|---|---|---
+gl|WebGLRenderingContext|必填|用于着色器编译的GL canvas上下文
+fragmentSource|String|必填|fragmentShader的编译源
+vertexSource|String|必填|vertexShader编译源</p>
+<h3 id="getattributelocationsgl-program-→-object">getAttributeLocations(gl, program) → {Object}</h3>
+<pre><code>将属性名称的映射返回到WebGLAttributeLocation对象。</code></pre>
+<p>参数|类型|性质|描述
+|---|---|---|---
+gl|WebGLRenderingContext|必填|canvas上下文用于编译着色器程序
+program|WebGLShaderProgram|必填|从中获取属性位置的着色器程序
+返回：<code>Object</code>,属性名称到属性位置的映射</p>
+<h3 id="getuniformlocationsgl-program-→-object">getUniformLocations(gl, program) → {Object}</h3>
+<pre><code>将统一名称的映射返回到WebGLUniformLocation对象。旨在被子类覆盖。</code></pre>
+<p>参数|类型|性质|描述
+|---|---|---|---
+gl|WebGLRenderingContext|必填|canvas上下文用于编译着色器程序
+program|WebGLShaderProgram|必填|从中获取属性位置的着色器程序
+返回：<code>Object</code>,属性名称到属性位置的映射</p>
+<h3 id="initializeoptionsopt">initialize(optionsopt)</h3>
+<pre><code>初始化</code></pre>
+<p>参数|类型|性质|描述
+|---|---|---|---
+options|Object|选填|选项对象</p>
+<h3 id="isneutralstateoptions">isNeutralState(options)</h3>
+<pre><code>一种基于参数的过滤器的通用isNeutral实现。仅在图像applyFilters中使用，以丢弃不会对图像产生影响的滤镜其他滤镜可能需要它们自己的版本（ColorMatrix，HueRotation，gamma，ComposedFilter）</code></pre>
+<p>参数|类型|性质|描述
+|---|---|---|---
+options|Object|必填|</p>
+<h3 id="retrieveshaderoptions">retrieveShader(options)</h3>
+<pre><code>检索缓存的着色器
+一种基于参数的过滤器的通用isNeutral实现。仅在图像applyFilters中使用，以丢弃不会对图像产生影响的滤镜其他滤镜可能需要它们自己的版本（ColorMatrix，HueRotation，gamma，ComposedFilter）</code></pre>
+<p>参数|类型|性质|描述
+|---|---|---|---
+options|Object|必填|
+options
+参数|类型|性质|描述
+|---|---|---|---
+context |WebGLRenderingContext|必填|用于渲染的GL上下文。
+programCache |Object|必填|映射的着色器程序的映射，以过滤器类型为键。</p>
+<h3 id="sendattributedatagl-attributelocations">sendAttributeData(gl, attributeLocations)</h3>
+<pre><code>将属性数据从此过滤器发送到GPU上的着色器程序。</code></pre>
+<p>参数|类型|性质|描述
+|---|---|---|---
+gl|WebGLRenderingContext|必填|canvas上下文用于编译着色器程序
+attributeLocations|WebGLShaderProgram|必填|着色器属性名称到其位置的映射。</p>
+<h3 id="senduniformdatagl-uniformlocations">sendUniformData(gl, uniformLocations)</h3>
+<pre><code>从该过滤器向其GPU上的着色器程序发送统一数据。旨在被子类覆盖。</code></pre>
+<p>参数|类型|性质|描述
+|---|---|---|---
+gl|WebGLRenderingContext|必填|canvas上下文用于编译着色器程序
+uniformLocations|Object|必填|着色器统一名称到其位置的映射</p>
+<h3 id="setoptionsoptionsopt">setOptions(optionsopt)</h3>
+<pre><code>从选项设置过滤器的属性</code></pre>
+<p>参数|类型|性质|描述
+|---|---|---|---
+options|Object|选填|选项对象</p>
+<h3 id="tojson-→-object">toJSON() → {Object}</h3>
+<pre><code>返回实例的JSON表示形式 </code></pre>
+<p>返回：<code>Object</code>，json</p>
+<h3 id="toobject-→-object">toObject() → {Object}</h3>
+<pre><code>返回实例的对象表示 </code></pre>
+<p>返回：<code>Object</code></p>

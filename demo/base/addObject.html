@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>加入基础物件-fabric.js base demo</title>
+    <link rel="stylesheet" href="../css/main.css">
+
+    <!-- <script src="../js/jquery.min.js"></script> -->
+</head>
+
+<body>
+    <main id="app">
+        <h1>加入基础物件</h1>
+        <!-- <p>xxxxx</p> -->
+        <button @click="addImage">图片-Image </button>
+        <button @click="addiText">文本-iText</button>
+        <button @clikc="addTextbox">文本框-Textbox </button>
+        <button>矩形-Rect</button>
+        <button>圆形-Circle </button>
+        <button>椭圆-Ellipse </button>
+        <button>三角形-Triangle </button>
+        <br>
+        <button>多边形-Polygon </button>
+        <button>折线-Polyline</button>
+        <button>路径-Path</button>
+        <button>组合-Group</button>
+        <button>xx</button>
+        <br>
+        <canvas id="fabricjsDocCn"></canvas>
+    </main>
+    <script src="../js/fabric.min.js"></script>
+    <script src="../js/Fn_fabric.js"></script>
+    <script src="../js/vue.min.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                canvas: null
+            },
+            created() {},
+            mounted() {
+                this.canvas = Fn_fabric.initCanvas()
+            },
+            updated() {},
+            methods: {
+                addImage() {
+                    let _this = this
+                    fabric.Image.fromURL('../images/logo.png', function (oImg) {
+                        console.log(123);
+                        Fn_fabric.putCenter(_this.canvas, oImg)
+                    })
+                },
+                addiText() {
+                    let text = new fabric.IText("New Text", {
+                        fontFamily: 'Helvetica',
+                        fill: "blue",
+                        fontSize: 56,
+                        lineHeight: 1.16,
+                        fontStyle: 'normal',
+                        fontWeight: 'normal',
+                        opacity: 1,
+                        textAlign: 'left',
+                        charSpacing: 0,
+                        textBackgroundColor: '',
+                        backgroundColor: '',
+                        shadow: {
+                            blur: 0,
+                            color: '#883912',
+                            offsetX: 0,
+                            offsetY: 0
+                        },
+                        overline: false,
+                        underline: false,
+                        linethrough: false,
+                    });
+                    Fn_fabric.putCenter(this.canvas, text)
+                },
+                addTextbox(){
+                    var t1 = new fabric.Textbox('MyText', {
+    width: 150,
+    top: 5,
+    left: 5,
+    fontSize: 16,
+    textAlign: 'center',
+    fixedWidth: 150,
+    fixedHeight: 20,
+});
+                    // this.canvas.add(t1)
+                    Fn_fabric.putCenter(this.canvas, t1)
+                },
+            },
+            computed: {},
+            watch: {}
+        })
+    </script>
+</body>
+<!-- from: https://github.com/renzhezhilu/fabric.js-doc-cn -->
+
+</html>

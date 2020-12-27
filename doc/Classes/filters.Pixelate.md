@@ -1,17 +1,19 @@
-# fabric.Image.filters.Grayscale
-灰度图片滤镜
+# fabric.Image.filters.Pixelate
+像素化滤镜
 继承`fabric.Image.filters.BaseFilter`
 
 ``` javascript
-var filter = new fabric.Image.filters.Grayscale();
+var filter = new fabric.Image.filters.Pixelate({
+  blocksize: 8
+});
 object.filters.push(filter);
 object.applyFilters();
 ```
 
 ## 成员
 
-### mode
-    灰度模式，介于“ average 平均”，“ lightness 亮度”，“ luminosity 发光度”之间
+### fragmentSource
+    Pixelate程序的片段源
 默认值： `average`
 
 ### mainParameter
@@ -20,7 +22,7 @@ object.applyFilters();
 
 ### type
     滤镜类型
-赋值类型： `Grayscale` 
+赋值类型： `Pixelate` 
 
 ## 方法
 

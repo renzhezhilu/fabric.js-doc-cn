@@ -1,0 +1,46 @@
+<h1 id="fabricshadow">fabric.Shadow</h1>
+<p>阴影</p>
+<h2 id="成员">成员</h2>
+<h3 id="static-reoffsetsandblur">(static) reOffsetsAndBlur</h3>
+<pre><code>正则表达式匹配阴影offsetX，offsetY和模糊（例如：“ 2px 2px 10px rgba（0,0,0,0.2）”，“ rgb（0,255,0）2px 2px”）</code></pre>
+<h3 id="affectstroke-boolean">affectStroke :Boolean</h3>
+<pre><code>阴影是否会影响笔划操作</code></pre>
+<p>赋值类型：<code>Boolean</code></p>
+<h3 id="blur-number">blur :Number</h3>
+<pre><code>阴影模糊</code></pre>
+<p>赋值类型：<code>Number</code></p>
+<h3 id="color-string">color :String</h3>
+<pre><code>阴影颜色</code></pre>
+<p>赋值类型：<code>String(&#39;rgb(0,0,0)&#39;)</code></p>
+<h3 id="includedefaultvalues-boolean">includeDefaultValues :Boolean</h3>
+<pre><code>指示toObject是否应包含默认值</code></pre>
+<p>赋值类型：<code>Boolean(true)</code></p>
+<h3 id="nonscaling-boolean">nonScaling :Boolean</h3>
+<pre><code>当为false时，阴影将随对象缩放。
+设为true时，阴影的offsetX，offsetY和模糊将不受对象比例的影响。默认为false</code></pre>
+<p>赋值类型：<code>Boolean(false)</code></p>
+<h3 id="offsetx-number">offsetX :Number</h3>
+<pre><code>阴影水平偏移</code></pre>
+<p>赋值类型：<code>Number</code></p>
+<h3 id="offsety-number">offsetY :Number</h3>
+<pre><code>阴影垂直偏移</code></pre>
+<p>赋值类型：<code>Number</code></p>
+<h2 id="方法">方法</h2>
+<h3 id="initializeoptionsopt-→-fabricshadow">initialize(optionsopt) → {fabric.Shadow}</h3>
+<pre><code>初始化</code></pre>
+<p> 参数|类型|性质|描述
+|---|---|---|---
+options|Object、String|选填|具有颜色，模糊，offsetX，offsetY属性或字符串的任何选项对象（例如“ rgba（0,0,0,0.2）2px 2px 10px”）
+返回：<code>fabric.Shadow</code></p>
+<h3 id="toobject">toObject()</h3>
+<pre><code>返回阴影的对象表示</code></pre>
+<p>返回：<code>Object</code></p>
+<h3 id="tostring">toString()</h3>
+<pre><code>返回实例的字符串表示形式</code></pre>
+<p>返回：<code>String</code>,返回CSS3文本阴影声明</p>
+<h3 id="tosvgobject">toSVG(object)</h3>
+<pre><code>阴影的SVG表示</code></pre>
+<p>参数|类型|性质|描述
+|---|---|---|---
+object|fabric.Object|必填|
+返回：<code>String</code></p>
