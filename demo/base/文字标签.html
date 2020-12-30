@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文字标签-fabric.js text label</title>
+    <link rel="stylesheet" href="../css/main.css">
+
+    <!-- <script src="../js/jquery.min.js"></script> -->
+</head>
+
+<body>
+    <main id="app">
+        <h1>文字标签</h1>
+        <!-- <p>xxxxx</p> -->
+        <button @click="add">添加 </button>
+        <button @click="add">鼠标拖拉添加 </button>
+        <br>
+        <canvas id="fabricjsDocCn"></canvas>
+    </main>
+    <script src="../js/fabric.min.js"></script>
+    <script src="../js/Fn_fabric.js"></script>
+    <script src="../js/vue.min.js"></script>
+    <script>
+        var llpp = new Vue({
+            el: '#app',
+            data: {
+                canvas: null
+            },
+            created() {},
+            mounted() {
+                let _this = this
+                // 初始化
+                this.canvas = Fn_fabric.initCanvas()
+                Fn_fabric.initObject()
+                let kk = textLabel(this.canvas)
+                textLabel(this.canvas, {
+                    startX: 100,
+                    startY: 300
+                })
+                textLabel(this.canvas, {
+                    startX: 100,
+                    startY: 200
+                })
+                kk.objects.bg.fill='red'
+
+                function textLabel(canvas, point = {
+                    startX: 300,
+                    startY: 300
+                }) {
+                    let text,
+                        bg,
+                        controlStart,
+                        controlEnd,
+                        line,
+                        line2,
+                        index,
+                        config,
+                        editingFn,
+                        initXY,
+                        isMe,
+                        setAllCoords,
+                        conputPos,
+                        conputTextBox,
+                        computLine,
+                        isShowPoint,
+                        FnShowPoint,
+                        output;
+                    index = canvas.getObjects().filter(f => f.id.includes('textLabel')).length / 5
+                    console.log(canvas.getObjects(), index);
+                    config = {
+                        radius: 6,
+                        fill: "red",
+                        hasControls: false,
+                        hasBorders: false,
+                        originX: 'left',
+                        originY: 'center',
+                    }
+                    /**
+                     ********************************* 定义物件
+                     */
+
+                    text = new fabric.IText('文字', {
+                        ...config,
+                        id: `textLabel_${index}_text`,
+                        fill: 'white',
+                        left: point.startX + 30,
+                        top: point.startY,
+                        fontFamily: 'Helvetica',
+                        fontSize: 14,
+                        lineHeight: 1,
+                        fontStyle: 'normal',
+                        fontWeight: 'normal',
+
+
+                    })
+                    bg = new fabric.Rect({
+                        ...config,
+                        id: `textLabel_${index}_bg`,
+                        left: point.startX + 20,
+                        top: point.startY,
+                        width: 50,
+                        height: 30,
+                        fill: 'rgba(0,0,0,.6)',
+                        rx: 4,
+                        ry: 4,
+
+                    })
+                    line = new fabric.Polyline([{
+                        x: 0,
+                        y: 0
+                    }, {
+                        x: 0,
+                        y: 0
+                    }, {
+                        x: 20,
+                        y: 0
+                    }], {
+                        ...config,
+                        fill: 'rgba(0,0,0,0)',
+                        id: `textLabel_${index}_line`,
+                        stroke: 'rgba(0,0,0,.4)',
+                        left: point.startX,
+                        top: point.startY,
+                        // fill: 'rgba(0,0,0,.7)',
+                        strokeWidth: 2,
+                        selectable: false,
+
+                    });
+                    controlStart = new fabric.Circle({
+                        ...config,
+                        id: `textLabel_${index}_controlStart`,
+                        left: point.startX,
+                        top: point.startY,
+                        originX: 'center',
+                        fill: "white",
+                        stroke: config.fill,
+                        strokeWidth: 3,
+                        opacity: 0,
+
+                    })
+                    controlEnd = new fabric.Circle({
+                        ...config,
+                        id: `textLabel_${index}_controlEnd`,
+                        left: bg.left + bg.width,
+                        top: bg.top,
+                        originX: 'center',
+                        fill: "white",
+                        stroke: config.fill,
+                        strokeWidth: 3,
+                        lockMovementY: true,
+                        opacity: 0,
+
+                    })
+                    canvas.add(line, bg, text, controlEnd, controlStart)
+                    
+                    // 重新设置默认的控制点
+                    setAllCoords = _ => {
+                        controlStart.setCoords()
+                        controlEnd.setCoords()
+                        text.setCoords()
+                        bg.setCoords()
+                        line.setCoords()
+                        canvas.requestRenderAll();
+                    }
+                    // 计算整体的移动位置
+                    conputPos = () => {
+                        if (!initXY) initXY = {
+                            aX: line.left - text.left,
+                            aY: line.top - text.top,
+                            sX: controlStart.left - text.left,
+                            sY: controlStart.top - text.top,
+                            eX: controlEnd.left - text.left,
+                            eY: controlEnd.top - text.top,
+                        }
+                        line.left = text.left + initXY.aX
+                        line.top = text.top + initXY.aY
+                        controlStart.left = text.left + initXY.sX
+                        controlStart.top = text.top + initXY.sY
+                        controlEnd.left = text.left + initXY.eX
+                        controlEnd.top = text.top + initXY.eY
+                        setAllCoords()
+                    }
+                    // 计算文字框的水平移动的控制点
+                    conputTextBox = () => {
+                        bg.left = controlEnd.left - bg.width
+                        bg.top = controlEnd.top
+                        text.left = bg.left + 10
+                        text.top = bg.top
+                        let lineDa = line.points
+                        if (bg.left < point.startX) {
+                            line.points[2].x = bg.left + bg.width - line.left
+                            console.log(333333);
+                        } else {
+                            line.points[2].x = bg.left - line.left
+                        }
+                        setAllCoords()
+                    }
+                    // 计算折线的起始点
+                    computLine = () => {
+                        line.points[0].x = controlStart.left - line.left
+                        line.points[0].y = controlStart.top - line.top
+                        setAllCoords()
+                    }
+                    // 判断是否是本体
+                    isMe = (e) => {
+                        if (
+                            e.target &&
+                            (e.target.id === `textLabel_${index}_controlStart` ||
+                                e.target.id === `textLabel_${index}_controlEnd` ||
+                                e.target.id === `textLabel_${index}_bg` ||
+                                e.target.id === `textLabel_${index}_text` ||
+                                e.target.id === `textLabel_${index}_line`
+                            )) return true
+                        else false
+                    }
+
+                    // 判是否现实控制点
+                    FnShowPoint = (isOpen = true) => {
+                        if (!isOpen) {
+                            controlStart.set({
+                                opacity: 0,
+                                selectable: false,
+                                evented: false,
+                            })
+                            controlEnd.set({
+                                opacity: 0,
+                                selectable: false,
+                                evented: false,
+                            })
+                        } else {
+                            controlStart.set({
+                                opacity: 1,
+                                selectable: true,
+                                evented: true,
+                            })
+                            controlEnd.set({
+                                opacity: 1,
+                                selectable: true,
+                                evented: true,
+                            })
+                        }
+                        setAllCoords()
+                    }
+
+                    /**
+                     ********************************* 定义事件
+                     */
+                    text.on('editing:entered', function (e) {
+                        editingFn = setInterval(() => {
+                            console.log('text');
+                            bg.width = text.width + 30
+                            bg.height = text.height + 15
+                            controlEnd.left = bg.left + bg.width
+                            conputTextBox()
+
+                        }, 100);
+                    });
+                    text.on('editing:exited', function (e) {
+                        clearInterval(editingFn)
+                    });
+                    initXY = null
+                    canvas.on('object:moving', function (e) {
+                        let obj = e.target
+                        // 移动文字框水平位置
+                        if (obj.id === `textLabel_${index}_controlEnd`) {
+                            conputTextBox()
+                            console.log(obj.id);
+                        }
+                        // 移动整体
+                        if (obj.id === `textLabel_${index}_text`) {
+                            bg.left = text.left - 10
+                            bg.top = text.top
+                            conputPos()
+                            conputTextBox()
+                            computLine()
+                        }
+                        // 移动整体
+                        if (obj.id === `textLabel_${index}_bg`) {
+                            text.left = bg.left + 10
+                            text.top = bg.top
+                            conputPos()
+                            conputTextBox()
+                            computLine()
+
+                        }
+                        // 移动折线的起始点
+                        if (obj.id === `textLabel_${index}_controlStart`) {
+                            computLine()
+                        }
+
+                    });
+                    canvas.on('object:modified', function (e) {
+                        let obj = e.target
+                        if (obj.id === `textLabel_${index}_text` || obj.id ===
+                            `textLabel_${index}_bg`) {
+                            initXY = null
+                        }
+                    })
+                    // 进入物件事件
+                    canvas.on('mouse:over', function (e) {
+                        if (isMe(e)) {
+                            FnShowPoint()
+                            if (isShowPoint) clearTimeout(isShowPoint)
+                        }
+                    })
+                    // 离开物件事件
+                    canvas.on('mouse:out', function (e) {
+                        if (isMe(e)) {
+                            isShowPoint = setTimeout(() => {
+                                FnShowPoint(false)
+                            }, 2000);
+
+                        }
+                    })
+                    output = {
+                        objects:{
+                            line, bg, text, controlEnd, controlStart
+                        },
+                    }
+                    return output
+                }
+            },
+            updated() {},
+            methods: {
+                add() {
+                    Fn_fabric.agileArrow(this.canvas, {
+                        startX: Math.random() * 600,
+                        startY: Math.random() * 500,
+                        endX: Math.random() * 510,
+                        endY: Math.random() * 610
+                    })
+                }
+            },
+            computed: {},
+            watch: {}
+        })
+    </script>
+</body>
+<!-- from: https://github.com/renzhezhilu/fabric.js-doc-cn -->
+
+</html>

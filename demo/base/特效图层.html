@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>特效图层-fabric.js filter layer</title>
+    <link rel="stylesheet" href="../css/main.css">
+
+    <!-- <script src="../js/jquery.min.js"></script> -->
+</head>
+
+<body>
+    <main id="app">
+        <h1>特效图层</h1>
+        <!-- <p>xxxxx</p> -->
+        <button @click="add">添加 </button>
+        <button @click="add">鼠标拖拉添加 </button>
+        <br>
+        <canvas id="fabricjsDocCn"></canvas>
+    </main>
+    <script src="../js/fabric.min.js"></script>
+    <script src="../js/Fn_fabric.js"></script>
+    <script src="../js/vue.min.js"></script>
+    <script>
+        var llpp = new Vue({
+            el: '#app',
+            data: {
+                canvas: null
+            },
+            created() {},
+            mounted() {
+                let _this = this
+                // 初始化
+                this.canvas = Fn_fabric.initCanvas()
+                Fn_fabric.initObject()
+                /**
+                 *  01. let el = canvas.toCanvasElement()方法获取画布的dom
+                 *  02. 使用new fabric.Image(el,{})加载dom
+                 *  03. 适使用滤镜
+                 *  04. Image.getElement()获取img dom
+                 *  05. 最后加进new fabric.Pattern({source: img})
+                 */
+
+
+                filterLayer()
+
+                function filterLayer() {
+                    let pattern = new fabric.Pattern({
+                        source: null,
+                        repeat: 'no-repeat'
+                    })
+                    let t1 = new fabric.Rect({
+                        id: 't1',
+                        width: 150,
+                        height: 100,
+                        rx: 10,
+                        ry: 10,
+                        left: 200,
+                        top: 200,
+                        // lockRotation:true,
+                        // lockScalingFlip:true,
+                        // lockSkewingX:true,
+                        // lockSkewingY:true,
+                        
+                        // backgroundColor: 'blue',
+                        fill: pattern
+                    });
+                    t1.setControlsVisibility({
+                            mt: true, 
+                            mb: true, 
+                            ml: true, 
+                            mr: true, 
+                            bl: true, 
+                            br: true, 
+                            tl: true, 
+                            tr: true, 
+                            mtr: false, 
+                        })
+                    console.log(t1);
+                    // 模糊 0 -1
+                    let blur = new fabric.Image.filters.Blur({
+                        blur: 3
+                    });
+                    //   像素画 1-1000
+                    let blocksize = new fabric.Image.filters.Pixelate({
+                        blocksize: 33
+                    });
+
+                    fabric.Image.fromURL('../images/bg.jpg', function (oImg) {
+                        oImg.set({
+                            hasControls: false,
+                            hasBorders: false,
+                            selectable: false,
+                            evented: false, //不触发事件
+                            // scaleX: 2,
+                            // scaleY: 0.7
+                        })
+                        _this.canvas.add(oImg)
+                        let img = new fabric.Image(_this.canvas.toCanvasElement(), {});
+                        img.filters.push(blocksize);
+                        img.applyFilters();
+                        pattern.source = img.getElement()
+                        pattern.offsetX = -t1.left
+                        pattern.offsetY = -t1.top
+                        _this.canvas.add(t1)
+                        // t1.viewportCenter()
+
+                    })
+                    _this.canvas.on('object:moving', function (e) {
+                        if (e.target.id === 't1') {
+                            t1.fill.offsetX = -t1.left
+                            t1.fill.offsetY = -t1.top
+                        }
+                    })
+                    _this.canvas.on('object:scaling', function (e) {
+                        if (e.target.id === 't1') {
+                            t1.set({
+                                'height': t1.height * t1.scaleY,
+                                'width': t1.width * t1.scaleX,
+                                'scaleX': 1,
+                                'scaleY': 1
+                            });
+                            t1.fill.offsetX = -t1.left
+                            t1.fill.offsetY = -t1.top
+                        }
+                    })
+
+
+                }
+            },
+            updated() {},
+            methods: {
+                add() {}
+            },
+            computed: {},
+            watch: {}
+        })
+    </script>
+</body>
+<!-- from: https://github.com/renzhezhilu/fabric.js-doc-cn -->
+
+</html>

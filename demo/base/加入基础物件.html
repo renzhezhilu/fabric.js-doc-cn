@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>加入基础物件-fabric.js add Object demo</title>
+    <link rel="stylesheet" href="../css/main.css">
+
+    <!-- <script src="../js/jquery.min.js"></script> -->
+</head>
+
+<body>
+    <main id="app">
+        <h1>加入基础物件</h1>
+        <p>所有内置物件</p>
+        <br>
+        <button @click="addImage">图片-Image </button>
+        <button @click="addiText">文本-iText</button>
+        <button @click="addTextbox">文本框-Textbox </button>
+        <button @click="addRect">矩形-Rect</button>
+        <button @click="addCircle">圆形-Circle </button>
+        <button @click="addEllipse">椭圆-Ellipse </button>
+        <button @click="addTriangle">三角形-Triangle </button>
+        <br>
+        <button @click="addPolygon">多边形-Polygon </button>
+        <button @click="addPolyline">折线-Polyline</button>
+        <button @click="addPath">路径-Path</button>
+        <button @click="addLine">线-Line</button>
+
+        <button @click="addGroup">组合-Group</button>
+        <br>
+        <canvas id="fabricjsDocCn"></canvas>
+    </main>
+    <script src="../js/fabric.min.js"></script>
+    <script src="../js/Fn_fabric.js"></script>
+    <script src="../js/vue.min.js"></script>
+    <script>
+        var llpp = new Vue({
+            el: '#app',
+            data: {
+                canvas: null
+            },
+            created() {},
+            mounted() {
+                let _this = this
+                // 初始化
+                this.canvas = Fn_fabric.initCanvas()
+                Fn_fabric.initObject()
+            },
+            updated() {},
+            methods: {
+                addImage() {
+                    let _this = this
+                    fabric.Image.fromURL('../images/logo.png', function (oImg) {
+                        console.log(123);
+                        Fn_fabric.putCenter(_this.canvas, oImg)
+                    })
+
+                },
+                addiText() {
+                    let text = new fabric.IText("New Text", {
+                        fontFamily: 'Helvetica',
+                        fill: "blue",
+                        fontSize: 56,
+                        lineHeight: 1.16,
+                        fontStyle: 'normal',
+                        fontWeight: 'normal',
+                        opacity: 1,
+                        textAlign: 'left',
+                        charSpacing: 0,
+                        textBackgroundColor: '',
+                        backgroundColor: '',
+                        shadow: {
+                            blur: 0,
+                            color: 'yellow',
+                            offsetX: 2,
+                            offsetY: 3
+                        },
+                        overline: false,
+                        underline: false,
+                        linethrough: false,
+                    });
+                    Fn_fabric.putCenter(this.canvas, text)
+                },
+                addRect() {
+                    var t1 = new fabric.Rect({
+                        width: 150,
+                        height: 100,
+                        fill: 'orange',
+                        rx: 10,
+                        ry: 10
+                    });
+                    Fn_fabric.putCenter(this.canvas, t1)
+                },
+                addTextbox() {
+                    var t1 = new fabric.Textbox('这里有两种数据类型，\n一种对象，\n另一种也是对象😂', {
+                        width: 22,
+                        top: 5,
+                        left: 5,
+                        fontSize: 16,
+                        fill: 'darkBlue',
+                        textAlign: 'center',
+                        fixedWidth: 22,
+                        fixedHeight: 20,
+                    });
+                    Fn_fabric.putCenter(this.canvas, t1)
+                },
+                addCircle() {
+                    var t1 = new fabric.Circle({
+                        fill: '#777',
+                        radius: 100,
+
+                    });
+                    // this.canvas.add(t1)
+                    Fn_fabric.putCenter(this.canvas, t1)
+                },
+                addEllipse() {
+                    var t1 = new fabric.Ellipse({
+                        fill: 'yellow',
+                        rx: 20,
+                        ry: 60,
+                    });
+                    Fn_fabric.putCenter(this.canvas, t1)
+                },
+                addTriangle() {
+                    var t1 = new fabric.Triangle({
+                        fill: 'pnik',
+                        width: 100,
+                        height: 100,
+                    });
+                    Fn_fabric.putCenter(this.canvas, t1)
+
+                },
+                addPolygon() {
+                    var t1 = new fabric.Polygon([{
+                            x: 0,
+                            y: 0
+                        },
+                        {
+                            x: 0,
+                            y: 60
+                        },
+
+                        {
+                            x: 130,
+                            y: 60
+                        },
+                        {
+                            x: 160,
+                            y: 110
+                        },
+                        {
+                            x: 130,
+                            y: 0
+                        },
+                    ], {
+                        fill: 'red'
+                    });
+                    Fn_fabric.putCenter(this.canvas, t1)
+
+                },
+                addPolyline() {
+                    var t1 = new fabric.Polyline([{
+                            x: 10,
+                            y: 10
+                        },
+                        {
+                            x: 50,
+                            y: 30
+                        },
+                        {
+                            x: 40,
+                            y: 70
+                        },
+                        {
+                            x: 60,
+                            y: 50
+                        },
+                        {
+                            x: 100,
+                            y: 150
+                        },
+                        {
+                            x: 220,
+                            y: 0
+                        },
+                        {
+                            x: 270,
+                            y: 40
+                        }
+                    ], {
+                        fill: '',
+                        stroke: 'red',
+                        strokeWidth: 5,
+                    });
+                    Fn_fabric.putCenter(this.canvas, t1)
+
+                },
+                addPath() {
+                    var t1 = new fabric.Path(
+                        'M121.32,0L44.58,0C36.67,0,29.5,3.22,24.31,8.41c-5.19,5.19-8.41,12.37-8.41,20.28c0,15.82,12.87,28.69,28.69,28.69c0,0,4.4,0,7.48,0C36.66,72.78,8.4,101.04,8.4,101.04C2.98,106.45,0,113.66,0,121.32c0,7.66,2.98,14.87,8.4,20.29l0,0c5.42,5.42,12.62,8.4,20.28,8.4c7.66,0,14.87-2.98,20.29-8.4c0,0,28.26-28.25,43.66-43.66c0,3.08,0,7.48,0,7.48c0,15.82,12.87,28.69,28.69,28.69c7.66,0,14.87-2.99,20.29-8.4c5.42-5.42,8.4-12.62,8.4-20.28l0-76.74c0-7.66-2.98-14.87-8.4-20.29C136.19,2.98,128.98,0,121.32,0z'
+                    );
+                    Fn_fabric.putCenter(this.canvas, t1)
+                },
+                addLine() {
+                    var t1 = new fabric.Line([0, 0, 250, 175], {
+                        fill: 'red',
+                        stroke: 'red',
+                        strokeWidth: 5,
+                    });
+                    this.canvas.add(t1)
+                    // Fn_fabric.putCenter(this.canvas, t1)
+                },
+                addGroup() {
+                    var t1 = new fabric.Rect({
+                        width: 200,
+                        height: 30,
+                        fill: 'orange',
+                        rx: 16,
+                        ry: 16,
+                    });
+                    let text = new fabric.Textbox("Button", {
+                        fill: "black",
+                        fontSize: 16,
+                        width: 200,
+                        textAlign: 'center',
+                        top: 5
+                    });
+                    let group = new fabric.Group([t1, text])
+                    Fn_fabric.putCenter(this.canvas, group)
+                },
+            },
+            computed: {},
+            watch: {}
+        })
+    </script>
+</body>
+<!-- from: https://github.com/renzhezhilu/fabric.js-doc-cn -->
+
+</html>
