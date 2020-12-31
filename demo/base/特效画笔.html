@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>特效画笔-fabric.js filter layer</title>
+    <link rel="stylesheet" href="../css/main.css">
+
+    <!-- <script src="../js/jquery.min.js"></script> -->
+</head>
+
+<body>
+    <main id="app">
+        <h1>特效画笔</h1>
+        <!-- <p>xxxxx</p> -->
+        <button @click="canvas.isDrawingMode =  !canvas.isDrawingMode ">开关 </button>
+        <button @click="add">鼠标拖拉添加 </button>
+        <br>
+        <canvas id="fabricjsDocCn"></canvas>
+    </main>
+    <script src="../js/fabric.min.js"></script>
+    <script src="../js/Fn_fabric.js"></script>
+    <script src="../js/vue.min.js"></script>
+    <script>
+        var llpp = new Vue({
+            el: '#app',
+            data: {
+                canvas: null
+            },
+            created() {},
+            mounted() {
+                let _this = this
+                // 初始化
+                this.canvas = Fn_fabric.initCanvas()
+                Fn_fabric.initObject()
+                this.canvas.setBackgroundColor({
+                    source: '../images/bg.jpg'
+                }, () => {
+                    this.canvas.renderAll()
+                    this.canvas.isDrawingMode = true
+
+                    let filter = {
+                        // 模糊 0 -1
+                        blur: new fabric.Image.filters.Blur({
+                            blur: .3
+                        }),
+                        //   像素画 1-1000
+                        blocksize: new fabric.Image.filters.Pixelate({
+                            blocksize: 10
+                        })
+                    }
+                    // 预先加好特技，创建成功后在正式 addFilterLayer
+                    let img = new fabric.Image(this.canvas.toCanvasElement(), {});
+                    img.filters.push(filter.blur);
+                    img.applyFilters();
+                    // 加完特技导入图案
+
+                    var texturePatternBrush = new fabric.PatternBrush(this.canvas);
+                    texturePatternBrush.source = img.getElement()
+                    texturePatternBrush.width = 30
+                    texturePatternBrush.color = 'red'
+                    this.canvas.freeDrawingBrush = texturePatternBrush
+                    this.canvas.on('mouse:up', function (e) {
+                        if (_this.canvas.isDrawingMode) {
+                            let brushPath = _this.canvas.item(_this.canvas.size() - 1)
+                            addFilterLayer(_this.canvas, brushPath, 'stroke')
+                            console.log(_this.canvas.item(_this.canvas.size() - 1));
+                        }
+                    })
+                  
+                    var t4 = new fabric.Rect({
+                        width: 100,
+                        height: 100,
+                        left:100
+                    });
+                    var t2 = new fabric.Rect({
+                        width: 100,
+                        height: 100,
+                        left:200
+                    });
+                    var t5 = new fabric.Rect({
+                        width: 100,
+                        height: 100,
+                        left:100,
+                        fill:'yellow'
+                    });
+                    this.canvas.add(t5,t2,t4)
+                    addFilterLayer(this.canvas, t2)
+                    addFilterLayer(this.canvas, t4)
+
+                   
+
+                });
+
+                // 给已存在的物件添加特效
+                function addFilterLayer(canvas, obj, where = 'fill') {
+                    /**
+                     *  思路：
+                     *  01. let el = canvas.toCanvasElement()方法获取画布的dom
+                     *  02. 使用new fabric.Image(el,{})加载dom
+                     *  03. 适使用滤镜
+                     *  04. Image.getElement()获取img dom
+                     *  05. 最后加进new fabric.Pattern({source: img})
+                     * 
+                     * @where   'fill'  普通物件填充
+                     *          'stroke'画笔描边
+                     */
+                    let index,
+                        id,
+                        paoffset,
+                        ttern,
+                        filter,
+                        updateObj;
+
+                    index = canvas.getObjects().filter(f => f.id && f.id.includes('filterLayer')).length
+                    id = `filterLayer_${index}`
+                    // 计算背景偏移
+                    offset = (obj) => {
+                        if (where === 'fill') {
+                            return {
+                                x: -obj.left,
+                                y: -obj.top
+                            }
+                        } else if (where === 'stroke') {
+                            return {
+                                x: -obj.left - obj.strokeWidth / 2,
+                                y: -obj.top - obj.strokeWidth / 2
+                            }
+                        }
+                    }
+                    filter = {
+                        // 模糊 0 -1
+                        blur: new fabric.Image.filters.Blur({
+                            blur: .3
+                        }),
+                        //   像素画 1-1000
+                        blocksize: new fabric.Image.filters.Pixelate({
+                            blocksize: 10
+                        })
+                    }
+                    pattern = new fabric.Pattern({
+                        source: null,
+                        repeat: 'no-repeat'
+                    })
+                    obj.id = id
+                    obj[where] = pattern
+
+                    obj.setControlsVisibility({
+                        mtr: false,
+                    })
+                    // 更新效果
+                    updateObj = () => {
+                        // 清除特效图层index以上的图层
+                        let allObj = canvas.getObjects()
+                        let needChange = []
+                        allObj.map((m, ind) => m._moveTo = ind)
+                        allObj.map((m, ind) => {
+                            if (ind >= obj._moveTo) {
+                                needChange.push(m)
+                                canvas.remove(m)
+                            }
+                        })
+                        // 画布转dom后放入fabric.Image加特技
+                        let img = new fabric.Image(canvas.toCanvasElement(), {});
+                        img.filters.push(filter.blur);
+                        img.applyFilters();
+                        // 加完特技导入图案
+                        pattern.source = img.getElement()
+                        pattern.offsetX = offset(obj).x
+                        pattern.offsetY = offset(obj).y
+                        // 还原清除
+                        needChange.map(((m, ind) => {
+                            canvas.add(m)
+                        }))
+                        // 所有obj加入的自定义属性_moveTo,考虑下有没必要删？🤔️
+                        // rArr.map(((m,ind)=>{
+                        //     m.moveTo(m._moveTo)
+                        //     delete m._moveTo
+                        // }))
+                    }
+                    updateObj()
+                    // 所有图层改变时，更新效果
+                    canvas.on('object:modified', function (e) {
+                        canvas.getObjects().map((m, ind) => {
+                            m._moveTo = ind
+                        })
+                        // 只改变被改变图层之上的
+                        if (e.target._moveTo <= obj._moveTo) {
+                            console.log(111);
+                            updateObj()
+                        }
+                    })
+                    // 移动时让背景pattern偏差，达到视觉背景固定的效果
+                    canvas.on('object:moving', function (e) {
+                        if (e.target.id === id) {
+                            obj[where].offsetX = offset(obj).x
+                            obj[where].offsetY = offset(obj).y
+                        }
+                    })
+                    // 缩放时保持scaleX、scaleY，改变width和height
+                    canvas.on('object:scaling', function (e) {
+                        if (e.target.id === id) {
+                            obj.set({
+                                'height': obj.height * obj.scaleY,
+                                'width': obj.width * obj.scaleX,
+                                'scaleX': 1,
+                                'scaleY': 1
+                            });
+                            obj[where].offsetX = offset(obj).x
+                            obj[where].offsetY = offset(obj).y
+                        }
+                    })
+                }
+
+
+
+            },
+            updated() {},
+            methods: {
+                add() {}
+            },
+            computed: {},
+            watch: {}
+        })
+    </script>
+</body>
+<!-- from: https://github.com/renzhezhilu/fabric.js-doc-cn -->
+
+</html>

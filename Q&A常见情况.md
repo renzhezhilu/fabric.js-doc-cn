@@ -20,3 +20,7 @@
 ### 如何羽化？
     没有答案
     研究 用透明渐变色或自定义滤镜
+
+
+### 画笔模式的事件
+    https://stackoverflow.com/questions/54622125/fabric-js-freedrawing-on-hover-of-canvas-instead-of-click-mouse-down

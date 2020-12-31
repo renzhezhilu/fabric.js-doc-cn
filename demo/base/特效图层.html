@@ -30,103 +30,207 @@
             },
             created() {},
             mounted() {
-                let _this = this
-                // 初始化
-                this.canvas = Fn_fabric.initCanvas()
-                Fn_fabric.initObject()
-                /**
-                 *  01. let el = canvas.toCanvasElement()方法获取画布的dom
-                 *  02. 使用new fabric.Image(el,{})加载dom
-                 *  03. 适使用滤镜
-                 *  04. Image.getElement()获取img dom
-                 *  05. 最后加进new fabric.Pattern({source: img})
-                 */
+                ! function () {
+                    let _this = this
+                    // 初始化
+                    this.canvas = Fn_fabric.initCanvas()
+                    Fn_fabric.initObject()
 
+                    let RUN = _ => {
+                        var t2 = new fabric.Triangle({
+                            width: 100,
+                            height: 100,
+                        });
+                        var t3 = new fabric.Rect({
+                            width: 300,
+                            height: 100,
+                        });
+                        var t4 = new fabric.Rect({
+                            width: 300,
+                            height: 100,
+                        });
+                        var t5 = new fabric.Rect({
+                            width: 100,
+                            height: 200,
+                        });
+                        var t6 = new fabric.Rect({
+                            width: 230,
+                            height: 210,
+                        });
+                        var t7 = new fabric.Rect({
+                            width: 300,
+                            height: 100,
+                        });
+                        var t8 = new fabric.Rect({
+                            width: 300,
+                            height: 100,
+                           
+                        });
+                        var Path = new fabric.Path(
+                        'M121.32,0L44.58,0C36.67,0,29.5,3.22,24.31,8.41c-5.19,5.19-8.41,12.37-8.41,20.28c0,15.82,12.87,28.69,28.69,28.69c0,0,4.4,0,7.48,0C36.66,72.78,8.4,101.04,8.4,101.04C2.98,106.45,0,113.66,0,121.32c0,7.66,2.98,14.87,8.4,20.29l0,0c5.42,5.42,12.62,8.4,20.28,8.4c7.66,0,14.87-2.98,20.29-8.4c0,0,28.26-28.25,43.66-43.66c0,3.08,0,7.48,0,7.48c0,15.82,12.87,28.69,28.69,28.69c7.66,0,14.87-2.99,20.29-8.4c5.42-5.42,8.4-12.62,8.4-20.28l0-76.74c0-7.66-2.98-14.87-8.4-20.29C136.19,2.98,128.98,0,121.32,0z',{
+                            left:400,
+                            top:100
+                        }
+                    );
 
-                filterLayer()
-
-                function filterLayer() {
-                    let pattern = new fabric.Pattern({
+                        fabric.Image.fromURL('../images/logo.png', function (oImg) {
+                            fabric.Image.fromURL('../images/pic.jpg', function (oImg222) {
+                                oImg222.set({
+                                    scaleX: .7,
+                                    scaleY: .7
+                                })
+                                _this.canvas.add(t2)
+                                _this.canvas.add(oImg222)
+                                _this.canvas.add(t4)
+                                _this.canvas.add(t5)
+                                _this.canvas.add(t6)
+                                _this.canvas.add(t7)
+                                _this.canvas.add(t8)
+                                _this.canvas.add(Path)
+                                
+                                Fn_fabric.putCenter(_this.canvas, t3)
+                                oImg.set({})
+                                _this.canvas.add(oImg)
+                                addFilterLayer(_this.canvas, t2)
+                                addFilterLayer(_this.canvas, t3)
+                                addFilterLayer(_this.canvas, t4)
+                                addFilterLayer(_this.canvas, t5)
+                                addFilterLayer(_this.canvas, t6)
+                                addFilterLayer(_this.canvas, t7)
+                                addFilterLayer(_this.canvas, t8)
+                                addFilterLayer(_this.canvas, Path)
+                                
+                                setTimeout(() => {
+                                    t3.bringToFront()
+                                }, 5000);
+                                console.log(_this.canvas.__eventListeners);
+                                _this.canvas.getObjects().map(m => {
+                                    m.set({
+                                        strokeWidth: 1,
+                                        stroke: 'blue',
+                                        strokeDashArray: [1, 2]
+                                    })
+                                })
+                            })
+                        })
+                    }
+                    this.canvas.setBackgroundColor({
+                        source: '../images/bg.jpg'
+                    }, () => {
+                        this.canvas.renderAll()
+                        RUN()
+                    });
+                }()
+                // 删除特效
+                function removeFilterLayer(canvas,obj){
+                    // canvas.getObjects().map()
+                    /**
+                     * 事件优化下  
+                     * 查看所有事件-> canvas.__eventListeners
+                     * https://stackoverflow.com/questions/18737058/how-to-remove-event-listener-from-fabricjs-canvas
+                     * replace(/[^0-9]/ig,'')
+                    */
+                }
+                // 给已存在的物件添加特效
+                function addFilterLayer(canvas, obj) {
+                    /**
+                     *  思路：
+                     *  01. let el = canvas.toCanvasElement()方法获取画布的dom
+                     *  02. 使用new fabric.Image(el,{})加载dom
+                     *  03. 适使用滤镜
+                     *  04. Image.getElement()获取img dom
+                     *  05. 最后加进new fabric.Pattern({source: img})
+                     */
+                    let index,
+                        id,
+                        pattern,
+                        filter,
+                        updateObj;
+                    index = canvas.getObjects().filter(f => f.id && f.id.includes('filterLayer')).length
+                    id = `filterLayer_${index}`
+                    filter = {
+                        // 模糊 0 -1
+                        blur: new fabric.Image.filters.Blur({
+                            blur: .3
+                        }),
+                        //   像素画 1-1000
+                        blocksize: new fabric.Image.filters.Pixelate({
+                            blocksize: .3
+                        })
+                    }
+                    pattern = new fabric.Pattern({
                         source: null,
                         repeat: 'no-repeat'
                     })
-                    let t1 = new fabric.Rect({
-                        id: 't1',
-                        width: 150,
-                        height: 100,
-                        rx: 10,
-                        ry: 10,
-                        left: 200,
-                        top: 200,
-                        // lockRotation:true,
-                        // lockScalingFlip:true,
-                        // lockSkewingX:true,
-                        // lockSkewingY:true,
-                        
-                        // backgroundColor: 'blue',
+                    obj.set({
+                        id: id,
                         fill: pattern
-                    });
-                    t1.setControlsVisibility({
-                            mt: true, 
-                            mb: true, 
-                            ml: true, 
-                            mr: true, 
-                            bl: true, 
-                            br: true, 
-                            tl: true, 
-                            tr: true, 
-                            mtr: false, 
-                        })
-                    console.log(t1);
-                    // 模糊 0 -1
-                    let blur = new fabric.Image.filters.Blur({
-                        blur: 3
-                    });
-                    //   像素画 1-1000
-                    let blocksize = new fabric.Image.filters.Pixelate({
-                        blocksize: 33
-                    });
-
-                    fabric.Image.fromURL('../images/bg.jpg', function (oImg) {
-                        oImg.set({
-                            hasControls: false,
-                            hasBorders: false,
-                            selectable: false,
-                            evented: false, //不触发事件
-                            // scaleX: 2,
-                            // scaleY: 0.7
-                        })
-                        _this.canvas.add(oImg)
-                        let img = new fabric.Image(_this.canvas.toCanvasElement(), {});
-                        img.filters.push(blocksize);
-                        img.applyFilters();
-                        pattern.source = img.getElement()
-                        pattern.offsetX = -t1.left
-                        pattern.offsetY = -t1.top
-                        _this.canvas.add(t1)
-                        // t1.viewportCenter()
-
                     })
-                    _this.canvas.on('object:moving', function (e) {
-                        if (e.target.id === 't1') {
-                            t1.fill.offsetX = -t1.left
-                            t1.fill.offsetY = -t1.top
+                    obj.setControlsVisibility({
+                        mtr: false,
+                    })
+                    // 更新效果
+                    updateObj = () => {
+                        // 清除特效图层index以上的图层
+                        let allObj = canvas.getObjects()
+                        let needChange = []
+                        allObj.map((m, ind) => m._moveTo = ind)
+                        allObj.map((m, ind) => {
+                            if (ind >= obj._moveTo) {
+                                needChange.push(m)
+                                canvas.remove(m)
+                            }
+                        })
+                        // 画布转dom后放入fabric.Image加特技
+                        let img = new fabric.Image(canvas.toCanvasElement(), {});
+                        img.filters.push(filter.blur);
+                        img.applyFilters();
+                        // 加完特技导入图案
+                        pattern.source = img.getElement()
+                        pattern.offsetX = -obj.left
+                        pattern.offsetY = -obj.top
+                        // 还原清除
+                        needChange.map(((m, ind) => {
+                            canvas.add(m)
+                        }))
+                        // 所有obj加入的自定义属性_moveTo,考虑下有没必要删？🤔️
+                        // rArr.map(((m,ind)=>{
+                        //     m.moveTo(m._moveTo)
+                        //     delete m._moveTo
+                        // }))
+                    }
+                    updateObj()
+                    // 所有图层改变时，更新效果
+                    canvas.on('object:modified', function (e) {
+                        canvas.getObjects().map((m, ind) => {
+                            m._moveTo = ind
+                        })
+                        // 只改变被改变图层之上的
+                        if (e.target._moveTo <= obj._moveTo) {
+                            console.log(111);
+                            updateObj()
                         }
                     })
-                    _this.canvas.on('object:scaling', function (e) {
-                        if (e.target.id === 't1') {
-                            t1.set({
-                                'height': t1.height * t1.scaleY,
-                                'width': t1.width * t1.scaleX,
+                    // 移动时让背景pattern偏差，达到视觉背景固定的效果
+                    canvas.on('object:moving', function (e) {
+                        if (e.target.id === id) {
+                            obj.fill.offsetX = -obj.left
+                            obj.fill.offsetY = -obj.top
+                        }
+                    })
+                    // 缩放时保持scaleX、scaleY，改变width和height
+                    canvas.on('object:scaling', function (e) {
+                        if (e.target.id === id) {
+                            obj.set({
+                                'height': obj.height * obj.scaleY,
+                                'width': obj.width * obj.scaleX,
                                 'scaleX': 1,
                                 'scaleY': 1
                             });
-                            t1.fill.offsetX = -t1.left
-                            t1.fill.offsetY = -t1.top
+                            obj.fill.offsetX = -obj.left
+                            obj.fill.offsetY = -obj.top
                         }
                     })
-
-
                 }
             },
             updated() {},
