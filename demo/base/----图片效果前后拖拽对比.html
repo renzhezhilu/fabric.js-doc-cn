@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片效果前后拖拽对比-fabric.js base demo</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <script src="../js/fabric.min.js"></script>
+    <script src="../js/Fn_fabric.js"></script>
+    <script src="../js/vue.min.js"></script>
+    <!-- <script src="../js/jquery.min.js"></script> -->
+</head>
+
+<body>
+    <main id="app">
+        <h1>图片效果前后拖拽对比</h1>
+        <!-- <p>xxxxx</p> -->
+        <!-- <button>按钮</button> -->
+        <canvas id="fabricjsDocCn"></canvas>
+    </main>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                canvas: null,
+                // 
+                photo: null,
+            },
+            created() {},
+            mounted() {
+                let _this = this
+                // 初始化
+                this.canvas = Fn_fabric.initCanvas()
+                Fn_fabric.initObject()
+                ////////////////////////////////////////////
+                fabric.Image.fromURL('../images/p1.jpg', function (pic) {
+                    // pattern._width = oImg.width
+                    // pattern._height = oImg.height
+                    console.log(pic);
+                    // pattern.source = oImg.getElement()
+                    pic.set({
+                        left: 20,
+                        top: 30,
+                        scaleX: .3,
+                        scaleY: .3,
+                        // fill: pattern,
+                    });
+                    _this.canvas.add(pic)
+                    _this.startCompared(_this.canvas, pic)
+                    _this.photo = pic
+                })
+            },
+            methods: {
+                startCompared(canvas, pic) {
+                    pic.set({
+                        selectable: false,
+                        evented: false,
+                    })
+                    let config = {
+                        width: pic.width,
+                        height: pic.height,
+                        scaleX: pic.scaleX,
+                        scaleY: pic.scaleY,
+                        left: pic.left,
+                        top: pic.top,
+                        selectable: false,
+                        evented: false,
+                    }
+                    let filter = {
+                        // 模糊 0 -1
+                        blur: new fabric.Image.filters.Blur({
+                            blur: .3
+                        }),
+                        //   像素画 1-1000
+                        blocksize: new fabric.Image.filters.Pixelate({
+                            blocksize: .3
+                        })
+                    }
+                    // 透明背景
+                    pic.clone((p)=>{
+                        p.setSrc({})
+                    })
+                    let after = new fabric.Rect({
+                        ...config,
+                        fill: 'rgba(0,0,0,.6)',
+                    });
+                    canvas.add(after)
+                }
+            },
+            updated() {},
+
+            computed: {},
+            watch: {}
+        })
+    </script>
+</body>
+<!-- from: https://github.com/renzhezhilu/fabric.js-doc-cn -->
+
+</html>

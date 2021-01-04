@@ -47,6 +47,9 @@
                 // 初始化
                 this.canvas = Fn_fabric.initCanvas()
                 Fn_fabric.initObject()
+                this.canvas.on('object:added',(e)=>{
+                    console.log(this.canvas);
+                })
             },
             updated() {},
             methods: {

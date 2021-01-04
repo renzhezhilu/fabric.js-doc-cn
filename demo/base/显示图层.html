@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>显示图层-fabric.js object label</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <script src="../js/fabric.min.js"></script>
+    <script src="../js/Fn_fabric.js"></script>
+    <script src="../js/vue.min.js"></script>
+    <style>
+        .mainBox {
+            display: flex;
+        }
+
+        .labelBox {
+            flex-shrink: 0;
+            margin: 10px 0;
+            padding: 10px;
+        }
+
+        .labelBox li {
+            width: 300px;
+            padding: 0 10px;
+            margin-bottom: 3px;
+            background-color: #eee;
+            display: flex;
+            align-items: center;
+            border: 2px solid #eee;
+        }
+
+        .labelBox li.on {
+            border: 2px solid blue;
+        }
+
+        p {
+            font-size: 12px;
+            line-height: 12px;
+        }
+
+        .pic {
+            background-color: white;
+        }
+
+        .name,
+        .pic {
+            flex-shrink: 0;
+        }
+        .text{
+            padding-left: 10px;
+        }
+        .text b{
+            font-size: 12px;
+            padding: 5px 10px;
+        }
+
+        /*  */
+    </style>
+</head>
+
+<body>
+    <main id="app">
+        <h1>显示图层</h1>
+        <p>01.可选择、显示/隐藏、删除</p>
+        <p>02.图层上下移动、置顶、置底</p>
+        <p>02.物件缩略图</p>
+        {{ kkkobjects.length }}
+        <button @click="randomCreatOnjetc(canvas,6)">随机添加物件 </button>
+        <button @click="allDel">全部删除 </button>
+        <button @click="allShow">全部显示/隐藏 </button>
+        <br>
+        <div class="mainBox">
+            <div class="labelBox">
+                <ul>
+                    <li @click="selected(item.object,index)" v-for="(item,index) in objects" :key="index"
+                        :class="{'on':active===index || activeSelection.includes(index)}">
+                        <div class="pic">
+                            <canvas :id="item.id"></canvas>
+                        </div>
+                        <div class="text">
+                            <p class="name">
+                                {{ item.name}}
+                            </p>
+                            <b @click.stop="del(item.object,index)" class="del">del</b>
+                            <b @click.stop="show(item.object,index)" class="show">show</b>
+                            <b @click.stop="up(item.object,index)" class="show">up</b>
+                            <b @click.stop="down(item.object,index)" class="show">down</b>
+                            <b @click.stop="mostUp(item.object,index)" class="show">MostUp</b>
+                            <b @click.stop="mostDown(item.object,index)" class="show">MostDown</b>
+                        </div>
+                        <div class="num">
+                            {{ index}}
+                        </div>
+                    </li>
+                    
+                    <h3 v-if="objects.length===0">
+                        啥也没有
+                    </h3>
+
+                </ul>
+            </div>
+            <canvas id="fabricjsDocCn"></canvas>
+
+        </div>
+    </main>
+   
+    <script>
+        var llpp = new Vue({
+            el: '#app',
+            data: {
+                canvas: null,
+                // 所有物件
+                objects: [],
+                // 当前选择的物件
+                active: null,
+                // 缩略图大小
+                miniPic: {
+                    w: 50,
+                    h: 50
+                },
+                // 多选
+                activeSelection:[],
+                kkkobjects:[]
+            },
+            created() {},
+            mounted() {
+                let _this = this
+                // 初始化
+                this.canvas = Fn_fabric.initCanvas()
+                Fn_fabric.initObject()
+                ////////////////////////////////////////////
+                // 事件保持数据同步
+                this.canvas.on('object:added', (e) => {
+                    this.updataData()
+                })
+                this.canvas.on('object:removed', (e) => {
+                    this.updataData()
+                })
+                this.canvas.on('object:modified', (e) => {
+                    this.updataData()
+                    console.log(222333);
+
+                })
+                this.canvas.on('selection:cleared', (e) => {
+                    this.active = null
+                    this.activeSelection =[]
+                })
+                this.canvas.on('selection:created', (e) => {
+                    this.active = e.target.index
+                    
+
+                })
+                this.canvas.on('selection:updated', (e) => {
+                    this.active = e.target.index
+                    if(e.target.type==='activeSelection'){
+                        this.activeSelection = e.target._objects.map(m=>m.index)
+                    }else{
+                        this.activeSelection =[]
+                    }
+                    console.log(e.target.type);
+
+                })
+                this.kkkobjects = this.canvas._objects
+                console.log(this.canvas);
+                // 随机生成物件
+                this.randomCreatOnjetc(this.canvas, 10)
+                    var t1 = new fabric.Rect({
+                        width: 150,
+                        height: 100,
+                        fill: 'orange',
+                        rx: 10,
+                        ry: 10
+                    });
+                Fn_fabric.putCenter(this.canvas, t1)
+             
+
+
+            },
+            updated() {},
+            methods: {
+                selected(object, index) {
+                    this.active = index
+                    this.canvas.setActiveObject(object)
+                    this.canvas.renderAll()
+                },
+                del(object) {
+                    this.canvas.remove(object)
+                    object = null
+                    this.canvas.renderAll()
+                },
+                show(object) {
+                    object.visible = !object.visible
+                    this.canvas.renderAll()
+                },
+                allDel(object) {
+                    this.canvas.getObjects().map(m=>{
+                        this.canvas.remove(m)
+                        m=null
+                    })
+                    this.canvas.renderAll()
+                },
+                allShow(object) {
+                    this.canvas.getObjects().map(m=>{
+                        m.visible = !m.visible
+                    })
+                    this.canvas.renderAll()
+                },
+                up(object,index){
+                    object.bringForward()
+                    this.canvas.renderAll()
+                    this.active >0 ? this.active--:null
+                    this.updataData()
+                },
+                down(object,index){
+                    object.sendBackwards()
+                    this.active <this.objects.length-1 ? this.active++:null
+                    this.canvas.renderAll()
+                    this.updataData()
+                },
+                mostUp(object,index){
+                    object.bringToFront()
+                    this.active=0
+                    this.canvas.renderAll()
+                    this.updataData()
+                },
+                mostDown(object,index){
+                    object.sendToBack()
+                    this.active=this.objects.length-1
+                    this.canvas.renderAll()
+                    this.updataData()
+                },
+                // 获取图层需要的信息
+                getAllObjectToLabel(canvas) {
+                    let all = canvas.getObjects()
+                    let getName = (obj, index) => obj.name ? `${obj.name}-${obj.type}` :
+                        `${obj.text?obj.text:''}-图层${index}-${obj.type}`
+                    // 反序
+                    all.reverse()
+                    all = all.map((m, index) => {
+                        m.index = index
+                        return {
+                            // 缩略图 StaticCanvas 的id
+                            id: `staticCanvas${index}`,
+                            object: m,
+                            name: getName(m, index)
+                        }
+                    })
+                    return all
+                },
+                // 生产物件
+                randomCreatOnjetc(canvas, count) {
+                    return Fn_fabric.randomCreatOnjetc(canvas, count)
+                    // let getRandomColor = () => '#' + new Array(6).fill(0).map(m => '0123456789ABCDEF' [Math
+                    //     .floor(Math.random() * 16)
+                    // ]).join('')
+                    // let getType = () => ['Rect', 'Circle', 'Triangle', 'Ellipse', 'IText'][Math.floor(Math
+                    //     .random() * 5)]
+                    // let out = () => {
+                    //     let type = getType()
+                    //     let parm = _ => {
+                    //         return {
+                    //             left: 20 + Math.random() * 500,
+                    //             top: 20 + Math.random() * 400,
+                    //             width: 20 + Math.random() * 200,
+                    //             height: 20 + Math.random() * 200,
+                    //             radius: 20 + Math.random() * 200,
+                    //             rx: 2 + Math.random() * 20,
+                    //             ry: 2 + Math.random() * 20,
+                    //             fill: getRandomColor(),
+                    //         }
+                    //     }
+                    //     if (type === 'IText') {
+                    //         return new fabric[type](`文字图层-${getRandomColor()}`, parm())
+                    //     } else {
+                    //         return new fabric[type](parm())
+                    //     }
+                    // }
+                    // new Array(count).fill(0).map(m => out()).map(m => {
+                    //     canvas.add(m)
+                    // })
+                },
+                // 生成缩略图
+                creatMiniPic() {
+                    this.objects.map((obj, index) => {
+                        let one = obj.object
+                        let can = new fabric.StaticCanvas(obj.id);
+                        console.log(can);
+                        can.setWidth(this.miniPic.w);
+                        can.setHeight(this.miniPic.h);
+                        // 还原物件并填满整个画布
+                        fabric.util.enlivenObjects([one], function (objects) {
+                            let o = objects[0];
+                            let y = o.scaleY / o.scaleX;
+                            o.set({
+                                left: 0,
+                                top: 0,
+                                scaleX: 1,
+                                scaleY: y,
+                            });
+                            let w1 = o.width * o.scaleX;
+                            let h1 = o.height * o.scaleY;
+                            w1 > h1 ? null : (w1 = h1);
+                            can.setZoom((can.width / w1) * 0.9);
+                            Fn_fabric.putCenter(can, o,false);
+                        });
+                    })
+                },
+                updataData (){
+                    Fn_fabric.throttle.run(() => {
+                        this.objects = this.getAllObjectToLabel(this.canvas)
+                        /**
+                         * 生成缩略图
+                         * 
+                         * 注意啊，这里的延迟是因为执行间隔极短，vue的dom还没更新完成，
+                         * creatMiniPic 获取不到canvas ，实际生产时把 creatMiniPic 做成单独组件来解决
+                         * */
+
+                        setTimeout(() => {
+                            this.creatMiniPic()
+                    console.log(this.canvas);
+
+                        }, 0);
+
+                    }, 10);
+                }
+
+            },
+            computed: {},
+            watch: {}
+        })
+    </script>
+</body>
+<!-- from: https://github.com/renzhezhilu/fabric.js-doc-cn -->
+
+</html>

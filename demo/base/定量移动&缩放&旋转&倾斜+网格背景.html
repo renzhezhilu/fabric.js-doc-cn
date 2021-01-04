@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>定量移动 & 缩放 & 旋转 & 倾斜+网格背景-fabric.js draw Grid</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <script src="../js/fabric.min.js"></script>
+    <script src="../js/Fn_fabric.js"></script>
+    <script src="../js/vue.min.js"></script>
+</head>
+
+<body>
+    <main id="app">
+        <h1>定量移动&缩放&旋转&倾斜+网格背景</h1>
+        <!-- <p>旋转不修改imageData，只是通过计算位置来达到同样的效果，处理速度快啊</p> -->
+        <!-- <button @click="">旋转90+</button> -->
+
+        <br>
+        <canvas id="fabricjsDocCn"></canvas>
+
+    </main>
+
+    <script>
+        var llpp = new Vue({
+            el: '#app',
+            data: {
+                canvas: null,
+                outC: null,
+                // 
+                photo: null,
+
+            },
+            created() {},
+            mounted() {
+                let _this = this
+                // 初始化
+                this.canvas = Fn_fabric.initCanvas()
+                Fn_fabric.initObject()
+                ////////////////////////////////////////////
+                let leftX = 15
+                let topY = 15
+                let angle = 45
+                let scaleX = 0.1
+                let scaleY = 0.1
+                let skewX = 10
+                let skewY = 10
+                drawGrid(this.canvas,[leftX,topY])
+                Fn_fabric.randomCreatOnjetc(this.canvas, 5)
+                // 生成网格 
+                function drawGrid(canvas, padding = [10, 10], config = {
+                    fill: 'rgba(0,0,0,0)',
+                    stroke: '#eee',
+                    strokeWidth: 1
+                }) {
+                    let {
+                        width,
+                        height
+                    } = canvas
+                    let paddingX = padding[0]
+                    let paddingY = padding[1]
+                    console.log(width,height,paddingX,paddingY);
+                    let lineX = ``
+                    let lineY = ``
+                    let end = `Z`
+                    new Array(Math.round(width / paddingX)).fill(0).map((_, index) => {
+                        lineY += `M ${paddingX*index},0 L ${paddingX*index},${height} `
+                    })
+                    new Array(Math.round(height / paddingY)).fill(0).map((_, index) => {
+                        lineX += `M 0,${paddingY*index} L ${width},${paddingY*index} `
+                    })
+                    let allLine = lineX + lineY + end
+                    console.log(Math.round(height / paddingY));
+                    let grid = new fabric.Path(allLine, {
+                        ...config,
+                    })
+                    // console.log(grid.toDataURL());
+                    canvas.setBackgroundImage(grid.toDataURL(), canvas.renderAll.bind(canvas));
+                }
+                // fabric.Object.prototype.selectable = false,
+                this.canvas.on('object:moving', (e) => {
+                    let obj = e.target
+                    obj.left = Math.floor(obj.left / leftX) * leftX
+                    obj.top = Math.floor(obj.top / topY) * topY
+                })
+                this.canvas.on('object:scaling', (e) => {
+                    let obj = e.target
+                    obj.scaleX = Math.floor(obj.scaleX / scaleX) * scaleX
+                    obj.scaleY = Math.floor(obj.scaleY / scaleY) * scaleY
+                })
+                this.canvas.on('object:rotating', (e) => {
+                    let obj = e.target
+                    obj.rotate(Math.floor(obj.angle / angle) * angle)
+                })
+                this.canvas.on('object:skewing', (e) => {
+                    let obj = e.target
+                    obj.skewX = Math.floor(obj.skewX / skewX) * skewX
+                    obj.skewY = Math.floor(obj.skewY / skewY) * skewY
+                })
+
+            },
+            updated() {},
+            methods: {
+
+
+            },
+            computed: {},
+            watch: {}
+        })
+    </script>
+</body>
+<!-- from: https://github.com/renzhezhilu/fabric.js-doc-cn -->
+
+</html>

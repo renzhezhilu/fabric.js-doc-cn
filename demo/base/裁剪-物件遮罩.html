@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>裁剪-物件遮罩-fabric.js object Screenshot Crop</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <script src="../js/fabric.min.js"></script>
+    <script src="../js/Fn_fabric.js"></script>
+    <script src="../js/vue.min.js"></script>
+</head>
+
+<body>
+    <main id="app">
+        <h1>裁剪-物件遮罩</h1>
+        <p>加一层遮罩，并不修改</p>
+        <button @click="isCrop=!isCrop">开启裁剪模式 </button>
+        <button @click="intact">复原 </button>
+        
+        <br>
+        <canvas id="fabricjsDocCn"></canvas>
+    </main>
+
+    <script>
+        var llpp = new Vue({
+            el: '#app',
+            data: {
+                canvas: null,
+                // 
+                isCrop:false,
+
+            },
+            created() {},
+            mounted() {
+                let _this = this
+                // 初始化
+                this.canvas = Fn_fabric.initCanvas()
+                Fn_fabric.initObject()
+                ////////////////////////////////////////////
+                var pattern = new fabric.Pattern({
+                    source: null,
+                    repeat: 'no-repeat'
+                })
+                fabric.Image.fromURL('../images/pic.jpg', function (oImg) {
+                    pattern.source = oImg.getElement()
+                    pattern._width =oImg.width
+                    pattern._height =oImg.height
+                    // Fn_fabric.putCenter(_this.canvas, oImg)
+                })
+                var t1 = new fabric.Rect({
+                    width: 150,
+                    height: 100,
+                    left:200,
+                    top:200,
+                    fill: pattern,
+                });
+                this.canvas.add(t1)
+                // pattern.offsetX = -obj.left
+                // pattern.offsetY = -obj.top
+
+                // 移动时让背景pattern偏差，达到视觉背景固定的效果
+                this.canvas.on('object:moving', function (e) {
+                    let obj = e.target
+                    if (_this.isCrop) {
+                        obj.fill.offsetX = -obj.left
+                        obj.fill.offsetY = -obj.top
+                    }
+                })
+                // 缩放时保持scaleX、scaleY，改变width和height
+                this.canvas.on('object:scaling', function (e) {
+                    let obj = e.target
+                    console.log();
+                    if (_this.isCrop) {
+                        obj.set({
+                            'height': obj.height * obj.scaleY,
+                            'width': obj.width * obj.scaleX,
+                            'scaleX': 1,
+                            'scaleY': 1
+                        });
+                        obj.fill.offsetX = -obj.left
+                        obj.fill.offsetY = -obj.top
+                    }
+                })
+
+            },
+            updated() {},
+            methods: {
+                intact(){
+                    let obj = this.canvas.getActiveObject()
+                    console.log(obj);
+                    obj.width = obj.fill._width
+                    obj.height = obj.fill._height
+                    obj.scaleX=1
+                    obj.scaleY=1
+                    obj.fill.offsetX = 0
+                    obj.fill.offsetY = 0
+                    this.canvas.renderAll()
+
+                }
+
+            },
+            computed: {},
+            watch: {}
+        })
+    </script>
+</body>
+<!-- from: https://github.com/renzhezhilu/fabric.js-doc-cn -->
+
+</html>

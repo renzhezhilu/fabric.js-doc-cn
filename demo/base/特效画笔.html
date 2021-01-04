@@ -23,7 +23,7 @@
     <script src="../js/Fn_fabric.js"></script>
     <script src="../js/vue.min.js"></script>
     <script>
-        var llpp = new Vue({
+        let llpp = new Vue({
             el: '#app',
             data: {
                 canvas: null
@@ -38,58 +38,95 @@
                     source: '../images/bg.jpg'
                 }, () => {
                     this.canvas.renderAll()
-                    this.canvas.isDrawingMode = true
-
-                    let filter = {
-                        // 模糊 0 -1
-                        blur: new fabric.Image.filters.Blur({
-                            blur: .3
-                        }),
-                        //   像素画 1-1000
-                        blocksize: new fabric.Image.filters.Pixelate({
-                            blocksize: 10
-                        })
-                    }
+                    ///////////////////////////////////////////////////
                     // 预先加好特技，创建成功后在正式 addFilterLayer
-                    let img = new fabric.Image(this.canvas.toCanvasElement(), {});
-                    img.filters.push(filter.blur);
-                    img.applyFilters();
-                    // 加完特技导入图案
-
-                    var texturePatternBrush = new fabric.PatternBrush(this.canvas);
-                    texturePatternBrush.source = img.getElement()
-                    texturePatternBrush.width = 30
-                    texturePatternBrush.color = 'red'
-                    this.canvas.freeDrawingBrush = texturePatternBrush
+                    function creatFilterBrush(canvas) {
+                        let filter = {
+                            // 模糊 0 -1
+                            blur: new fabric.Image.filters.Blur({
+                                blur: .3
+                            }),
+                            //   像素画 1-1000
+                            blocksize: new fabric.Image.filters.Pixelate({
+                                blocksize: 10
+                            })
+                        }
+                        let img = new fabric.Image(canvas.toCanvasElement(), {});
+                        img.filters.push(filter.blur);
+                        img.applyFilters();
+                        let brush = new fabric.PatternBrush(canvas);
+                        brush.source = img.getElement()
+                        brush.width = 30
+                        brush._type = 'filterBrush'
+                        return brush
+                    }
+                    let closeBrush = () => {
+                        this.canvas.isDrawingMode = false
+                    }
+                    setTimeout(() => {
+                        this.canvas.isDrawingMode = true
+                        this.canvas.freeDrawingBrush = creatFilterBrush(_this.canvas)
+                        setTimeout(() => {
+                            closeBrush()
+                        }, 10000);
+                    }, 2000);
+                    this.canvas.on('mouse:down', function (e) {
+                    })
                     this.canvas.on('mouse:up', function (e) {
-                        if (_this.canvas.isDrawingMode) {
+                        // 如果是滤镜画笔，生成滤镜涂层
+                        if (_this.canvas.isDrawingMode && _this.canvas.freeDrawingBrush
+                            ._type === 'filterBrush') {
                             let brushPath = _this.canvas.item(_this.canvas.size() - 1)
                             addFilterLayer(_this.canvas, brushPath, 'stroke')
-                            console.log(_this.canvas.item(_this.canvas.size() - 1));
+                        }
+                        // 如果是滤镜画笔，更新canvas截图
+                        if (!_this.canvas.isDrawingMode && _this.canvas.freeDrawingBrush
+                            ._type === 'filterBrush') {
+                            _this.canvas.freeDrawingBrush = creatFilterBrush(_this.canvas)
+                            console.log('down');
+
                         }
                     })
-                  
-                    var t4 = new fabric.Rect({
-                        width: 100,
-                        height: 100,
-                        left:100
-                    });
-                    var t2 = new fabric.Rect({
-                        width: 100,
-                        height: 100,
-                        left:200
-                    });
-                    var t5 = new fabric.Rect({
-                        width: 100,
-                        height: 100,
-                        left:100,
-                        fill:'yellow'
-                    });
-                    this.canvas.add(t5,t2,t4)
-                    addFilterLayer(this.canvas, t2)
-                    addFilterLayer(this.canvas, t4)
 
-                   
+
+                    let t1 = new fabric.Rect({
+                        width: 100,
+                        height: 100,
+                        left: 100
+                    });
+                    let t2 = new fabric.Rect({
+                        width: 100,
+                        height: 100,
+                        left: 200
+                    });
+                    let t3 = new fabric.Rect({
+                        width: 200,
+                        height: 100,
+                        left: 500
+                    });
+                    let t4 = new fabric.Rect({
+                        width: 100,
+                        height: 100,
+                        left: 100,
+                        fill: 'yellow'
+                    });
+                    let t5 = new fabric.Rect({
+                        width: 120,
+                        height: 320,
+                        left: 300,
+                        fill: 'blue'
+                    });
+                    this.canvas.add(t4)
+                    this.canvas.add(t5)
+                    this.canvas.add(t1)
+                    this.canvas.add(t2)
+                    this.canvas.add(t3)
+
+                    addFilterLayer(this.canvas, t1)
+                    addFilterLayer(this.canvas, t2)
+                    addFilterLayer(this.canvas, t3)
+
+
 
                 });
 
@@ -109,7 +146,7 @@
                     let index,
                         id,
                         paoffset,
-                        ttern,
+                        pattern,
                         filter,
                         updateObj;
 
@@ -161,6 +198,7 @@
                                 canvas.remove(m)
                             }
                         })
+                        console.log(222);
                         // 画布转dom后放入fabric.Image加特技
                         let img = new fabric.Image(canvas.toCanvasElement(), {});
                         img.filters.push(filter.blur);
@@ -173,10 +211,11 @@
                         needChange.map(((m, ind) => {
                             canvas.add(m)
                         }))
+                        canvas.renderAll()
                         // 所有obj加入的自定义属性_moveTo,考虑下有没必要删？🤔️
-                        // rArr.map(((m,ind)=>{
+                        // needChange.map(((m,ind)=>{
                         //     m.moveTo(m._moveTo)
-                        //     delete m._moveTo
+                        //     // delete m._moveTo
                         // }))
                     }
                     updateObj()

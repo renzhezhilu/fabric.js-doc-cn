@@ -2,6 +2,8 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    list-style-type: none;
+    list-style-image: none;
 }
 
 body {
@@ -12,7 +14,7 @@ body {
 main{
     padding: 30px;
 }
-canvas{
+canvas#fabricjsDocCn{
     border-radius: 6px;
     margin:10px 0;
 }

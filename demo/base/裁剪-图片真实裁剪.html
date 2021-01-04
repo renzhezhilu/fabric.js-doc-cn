@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>裁剪-图片真实裁剪-fabric.js object Screenshot Crop</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <script src="../js/fabric.min.js"></script>
+    <script src="../js/Fn_fabric.js"></script>
+    <script src="../js/vue.min.js"></script>
+</head>
+
+<body>
+    <main id="app">
+        <h1>图片裁剪</h1>
+        <p>真实裁剪，图片原数据会改变</p>
+        <button @click="start">开启</button>
+        <button @click="end">关闭</button>
+        <button @click="ok">确认 </button>
+        <button @click="one">1:1 </button>
+
+        <div v-if="photo && photo._cropObject && photo._cropObject.crop">
+        {{
+            `宽：${photo._cropObject.crop.width} 高：${photo._cropObject.crop.height}`
+
+        }}
+    </div>
+        <br>
+        <canvas id="fabricjsDocCn"></canvas>
+    </main>
+
+    <script>
+        var llpp = new Vue({
+            el: '#app',
+            data: {
+                canvas: null,
+                // 
+                photo: null,
+
+            },
+            created() {},
+            mounted() {
+                let _this = this
+                // 初始化
+                this.canvas = Fn_fabric.initCanvas()
+                Fn_fabric.initObject()
+                ////////////////////////////////////////////
+                var pattern = new fabric.Pattern({
+                    source: null,
+                    repeat: 'no-repeat'
+                })
+                fabric.Image.fromURL('../images/p1.jpg', function (pic) {
+                    // pattern._width = oImg.width
+                    // pattern._height = oImg.height
+                    console.log(pic);
+                    // pattern.source = oImg.getElement()
+                    pic.set({
+                        left: 120,
+                        top: 30,
+                        scaleX: .3,
+                        scaleY: .3,
+                        // fill: pattern,
+                    });
+                    _this.canvas.add(pic)
+                    _this.startImageCrop(_this.canvas, pic)
+                    _this.photo = pic
+
+                })
+
+
+
+
+
+
+
+
+                // pattern.offsetX = -obj.left
+                // pattern.offsetY = -obj.top
+
+
+
+            },
+            updated() {},
+            methods: {
+                start() {
+                    this.end()
+                    this.startImageCrop(this.canvas, this.photo)
+                    this.canvas.renderAll()
+
+                },
+                end() {
+
+                    if (this.photo && this.photo._cropObject) {
+                        this.canvas.selection = true
+                        this.photo.set({
+                            selectable: true,
+                            evented: true,
+                        })
+                        this.canvas.remove(this.photo._cropObject.bg, this.photo._cropObject.crop)
+                        console.log(this.photo);
+                        this.canvas.renderAll()
+
+                        delete this.photo._cropObject
+                    }
+
+                },
+                ok() {
+                    this.photo.setSrc(this.photo._cropObject.output(), () => {
+                        // this.photo.scaleX=1
+                        // this.photo.scaleY=1
+                        this.photo.left=this.photo._cropObject.crop.left
+                        this.photo.top=this.photo._cropObject.crop.top
+                        this.canvas.renderAll()
+                        this.end()
+                    })
+
+                },
+                one() {
+                    this.photo.scaleX = 1
+                    this.photo.scaleY = 1
+                    this.canvas.renderAll()
+                },
+                startImageCrop(canvas, pic) {
+                    pic._cropObject = {}
+                    canvas.selection = false
+                    pic.set({
+                        selectable: false,
+                        evented: false,
+                    })
+                    // 裁剪框的初始占比 0-1
+                    let suo = .9
+                    let config = {
+                        width: pic.width,
+                        height: pic.height,
+                        scaleX: pic.scaleX,
+                        scaleY: pic.scaleY,
+                        left: pic.left,
+                        top: pic.top
+                    }
+                    var pattern = new fabric.Pattern({
+                        source: pic.getElement(),
+                        repeat: 'no-repeat',
+                        // offsetX:-pic.getScaledWidth()*(1-suo)*2*suo,
+                        // offsetY:-pic.getScaledHeight()*(1-suo)*2*suo
+                    })
+                    // 透明背景
+                    let bg = new fabric.Rect({
+                        ...config,
+                        fill: 'rgba(0,0,0,.6)',
+                        selectable: false,
+                        evented: false,
+                    });
+                    // 选择框
+                    let crop = new fabric.Rect({
+                        ...config,
+                        fill: pattern,
+                        width: pic.width * suo,
+                        height: pic.height * suo,
+                        left: pic.left + (pic.getScaledWidth() *
+                            (1 - suo) / 2),
+                        top: pic.top + (pic.getScaledHeight() *
+                            (1 - suo) / 2),
+                    });
+                    pattern.offsetX = -(crop.left - pic.left) / crop.scaleX
+                    pattern.offsetY = -(crop.top - pic.top) / crop.scaleY
+                    console.log(crop.scaleY);
+                    // pattern.offsetY= -(pic.getScaledHeight()-crop.getScaledHeight())/2
+                    crop.setControlsVisibility({
+                        mtr: false,
+                    })
+                    let output = () => {
+                        // Fn_fabric.throttle.run(() => {
+                        //     pic._cropObject._output = crop.toDataURL({
+                        //         format: 'png',
+                        //         multiplier:1/pic.scaleX
+                        //     })
+                        //     console.log(pic._cropObject._output);
+                        // }, 1);
+                        return crop.toDataURL({
+                            format: 'png',
+                            multiplier: 1 / pic.scaleX
+                        })
+                    }
+                    // 移动裁剪框时
+                    crop.on('moving', (e) => {
+                        // 限制移动范围
+                        let minLeft = pic.left
+                        let maxLeft = pic.getScaledWidth() - crop
+                            .getScaledWidth() + pic.left
+                        let minTop = pic.top
+                        let maxTop = pic.getScaledHeight() - crop
+                            .getScaledHeight() + pic.top
+                        if (crop.left < minLeft) crop.left = minLeft
+                        if (crop.left > maxLeft) crop.left = maxLeft
+                        if (crop.top < minTop) crop.top = minTop
+                        if (crop.top > maxTop) crop.top = maxTop
+                        // 偏移
+                        if (crop.left < minLeft || crop.left > maxLeft || crop.top <
+                            minTop || crop.top > maxTop) {} else {
+                            pattern.offsetX = -(crop.left - pic.left) / pic.scaleX
+                            pattern.offsetY = -(crop.top - pic.top) / pic.scaleY
+                        }
+                    })
+                    // 移动时让背景pattern偏差，达到视觉背景固定的效果
+                    // 缩放时保持scaleX、scaleY，改变width和height
+                    crop.on('scaling', function (e) {
+                        // 存在抖动问题！！！！
+                        pattern.offsetX = -(crop.left - pic.left) / pic.scaleX
+                        pattern.offsetY = -(crop.top - pic.top) / pic.scaleY
+
+
+                        crop.width = crop.width * crop.scaleX / pic.scaleX,
+                            crop.height = crop.height * crop.scaleY / pic.scaleY
+                        // console.log(crop.width,crop.scaleX,pattern.offsetX );
+                        crop.scaleX = pic.scaleX
+                        crop.scaleY = pic.scaleY
+
+                        // crop.set({
+                        //     'width': crop.width * crop.scaleX/ pic.scaleX,
+                        //     'height': crop.height * crop.scaleY/ pic.scaleY,
+                        //     'scaleX': pic.scaleX,
+                        //     'scaleY': pic.scaleY
+                        // });
+
+                    })
+                    canvas.add(bg, crop)
+                    canvas.setActiveObject(crop)
+                    pic._cropObject.bg = bg
+                    pic._cropObject.crop = crop
+                    pic._cropObject.output = output
+                    console.log(crop.__eventListeners);
+                    return pic
+                }
+
+            },
+            computed: {},
+            watch: {}
+        })
+    </script>
+</body>
+<!-- from: https://github.com/renzhezhilu/fabric.js-doc-cn -->
+
+</html>

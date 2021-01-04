@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片旋转倾斜后输出-fabric.js object Adjust position after rotation</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <script src="../js/fabric.min.js"></script>
+    <script src="../js/Fn_fabric.js"></script>
+    <script src="../js/vue.min.js"></script>
+</head>
+
+<body>
+    <main id="app">
+        <h1>图片旋转倾斜后输出</h1>
+        <p>旋转不修改imageData，只是通过计算位置来达到同样的效果，处理速度快啊</p>
+        <button @click="rotate">旋转90+</button>
+
+        <br>
+        <canvas id="fabricjsDocCn"></canvas>
+        <br>
+        <b>1:1输出 StaticCanvas </b>
+        <b v-if="outC">
+            {{
+                Math.round(outC.canvas.width) + 'x' + Math.round(outC.canvas.height) 
+                + '缩放比例：'+ outC.canvas.getZoom()*100 +'%'
+            }}
+        </b>
+        <br>
+
+        <!-- <canvas id="outC"></canvas> -->
+        <img v-if="outC" :src="outC.dataUrl" alt="">
+
+    </main>
+
+    <script>
+        var llpp = new Vue({
+            el: '#app',
+            data: {
+                canvas: null,
+                outC: null,
+                // 
+                photo: null,
+
+            },
+            created() {},
+            mounted() {
+                let _this = this
+                // 初始化
+                this.canvas = Fn_fabric.initCanvas()
+                Fn_fabric.initObject()
+                ////////////////////////////////////////////
+                fabric.Image.fromURL('../images/bg.jpg', function (pic) {
+                    pic.set({
+                        left: 120,
+                        top: 100,
+                        scaleX: .3,
+                        scaleY: .3,
+                        originX:'center',
+                        originY:'center',
+
+                    });
+                    _this.canvas.add(pic)
+                    console.log(pic);
+                    pic.center()
+                    pic.setCoords()
+                    console.log(pic);
+
+                    pic.on('modified', (e) => {
+                        _this.outCanvas(pic, 1).then(d => {
+                            _this.outC = d
+                        })
+                        console.log(pic.getBoundingRect(), pic.scaleX);
+                    })
+                    _this.photo = pic
+
+                    // /////////
+                    _this.outCanvas(pic, .5).then(d => {
+                        _this.outC = d
+                    })
+                })
+
+            },
+            updated() {},
+            methods: {
+                rotate() {
+                    let angle = this.photo.angle
+                    if ([0, 90, 180, 270, 360].includes(this.photo.angle)) {
+                        angle += 90
+                    } else {
+                        angle = 0
+                    }
+                    // this.photo.setPositionByOrigin({
+                    //     x: this.photo.left,
+                    //     y: this.photo.top
+                    // }, 'center', 'center')
+                    this.photo.animate('angle', angle, {
+                        duration: 300,
+                        onChange: this.canvas.renderAll.bind(this.canvas),
+                        onComplete: function () {},
+                    });
+                    this.photo.rotate(angle)
+                    this.photo.setCoords()
+                    this.canvas.renderAll()
+                    this.outCanvas(this.photo).then(d => {
+                        this.outC = d
+                    })
+                },
+                // 物件输出Canvas
+                outCanvas(obj, multiplier = 1) {
+                    return new Promise((res, rej) => {
+                        let outC = new fabric.StaticCanvas();
+                        let bounding = obj.getBoundingRect()
+                        console.log(bounding);
+                        outC.setWidth(bounding.width / obj.scaleX)
+                        outC.setHeight(bounding.height / obj.scaleY)
+                        outC.setBackgroundColor('#999')
+                        obj.clone((o) => {
+                            // o.set({
+                            //     width:o.width/o.scaleX,
+                            //     height:o.height/o.scaleY
+                            // })
+                            // console.log(o);
+                            o.set({
+                                scaleX: 1,
+                                scaleY: 1
+                            })
+                            outC.add(o);
+                            // Fn_fabric.putCenter(outC, o, false, true)
+                            o.setPositionByOrigin({
+                                x: outC.width / 2,
+                                y: outC.height / 2
+                            }, 'center', 'center')
+                            outC.renderAll();
+                            outC.setZoom(multiplier)
+                            outC.setWidth(outC.width * multiplier)
+                            outC.setHeight(outC.height * multiplier)
+                            res({
+                                canvas: outC,
+                                dataUrl: outC.toDataURL({
+                                    format:'jpg',
+                                    quality: 0.1,
+                                }),
+                            })
+                        })
+                    })
+
+                },
+
+            },
+            computed: {},
+            watch: {}
+        })
+    </script>
+</body>
+<!-- from: https://github.com/renzhezhilu/fabric.js-doc-cn -->
+
+</html>

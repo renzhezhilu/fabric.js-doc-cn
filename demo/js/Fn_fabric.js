@@ -111,7 +111,53 @@ window.Fn_fabric = {
             }, ms);
         },
     },
-    // 
+    // 随机生成物件
+    randomCreatOnjetc(canvas, count) {
+        let getRandomColor = () => '#' + new Array(6).fill(0).map(m => '0123456789ABCDEF' [Math
+            .floor(Math.random() * 16)
+        ]).join('')
+        let getType = () => ['Rect', 'Circle', 'Triangle', 'Ellipse', 'IText'][Math.floor(Math
+            .random() * 5)]
+        let out = () => {
+            let type = getType()
+            let parm = _ => {
+                return {
+                    left: 20 + Math.random() * 500,
+                    top: 20 + Math.random() * 400,
+                    width: 20 + Math.random() * 200,
+                    height: 20 + Math.random() * 200,
+                    radius: 20 + Math.random() * 200,
+                    rx: 2 + Math.random() * 20,
+                    ry: 2 + Math.random() * 20,
+                    fill: getRandomColor(),
+                }
+            }
+            if (type === 'IText') {
+                return new fabric[type](`文字图层-${getRandomColor()}`, parm())
+            } else {
+                return new fabric[type](parm())
+            }
+        }
+        new Array(count).fill(0).map(m => out()).map(m => {
+            canvas.add(m)
+        })
+    },
+    // 指针是否在物件边缘
+    /**
+     * @parm o 物件
+     * @parm x mouse:move事件的e.pointer.x
+     * @parm y mouse:move事件的e.pointer.y
+     * @parm padding 边缘范围
+     * 
+     */
+     isEdgeFn(o, x, y, padding = 20) {
+        let isLeft = x > o.left && x < o.left + padding
+        let isRight = x < o.left + o.width && x > o.left + o.width - padding
+        let isTop = y > o.top && y < o.top + padding
+        let isBottom = y < o.top + o.height && y > o.top + o.height - padding
+        if (isLeft || isRight || isTop || isBottom) return true
+        else return false
+    },
     // 灵活箭头
     agileArrow(canvas, point = {
         startX: 600,

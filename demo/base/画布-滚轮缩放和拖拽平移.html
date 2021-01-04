@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>画布-滚轮缩放和拖拽平移-fabric.js Canvas-scroll wheel zoom and drag to pan</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <script src="../js/fabric.min.js"></script>
+    <script src="../js/Fn_fabric.js"></script>
+    <script src="../js/vue.min.js"></script>
+    <!-- <script src="../js/jquery.min.js"></script> -->
+    <style>
+        .canvasBox {
+            position: relative;
+        }
+
+        .miniMapDiv {
+            position: absolute;
+            top: 30px;
+            left: 20px;
+            z-index: 10;
+        }
+
+        #miniMap {
+            border: 1px solid blue;
+
+        }
+    </style>
+</head>
+
+<body>
+    <main id="app">
+        <div v-if="canvas">
+            <h1>画布-滚轮缩放和拖拽平移</h1>
+            <p>01 鼠标滚轮控制画布缩放</p>
+            <p>02 鼠标左键按住拖动画布</p>
+            <p>03 鼠标双击恢复100%</p>
+            <p>04 窗口大小改变，画布改变</p>
+
+
+            <button @click="canvas.setZoom(canvas.getZoom()*1.1)">放大</button>
+            <button @click="canvas.setZoom(canvas.getZoom()*0.9)">缩小</button>
+            <button @click="canvas.setZoom(1)">1:1</button>
+            <button @click="canvas.isDrawingMode=!canvas.isDrawingMode">画笔模式{{canvas.isDrawingMode}}</button>
+            <button @click="isSelection=!isSelection">移动模式{{!isSelection}}</button>
+            <button @click="isSelection=!isSelection">页面模式{{!isSelection}}</button>
+            <b>
+                {{
+                (canvas.viewportTransform[0]*100).toFixed(0) + "%"
+            }}
+            </b>
+        </div>
+
+        <div class="canvasBox">
+            <div class="miniMapDiv"><canvas id="miniMap"></canvas></div>
+            <canvas id="fabricjsDocCn"></canvas>
+        </div>
+    </main>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                canvas: null,
+                miniMap: null,
+                // 
+                isSelection: false
+            },
+            created() {},
+            mounted() {
+                let _this = this
+                // 初始化
+                this.canvas = Fn_fabric.initCanvas()
+                let canvas = this.canvas
+                Fn_fabric.initObject()
+                ////////////////////////////////////////////
+                Fn_fabric.randomCreatOnjetc(this.canvas, 10)
+                this.miniMap = this.creatMiniMap(this.canvas)
+                // 
+                let F_canvasOutWidth = _ => window.innerWidth - 100; //画布宽
+                let F_canvasOutHeight = _ => window.innerHeight - 250; //画布高
+                canvas.setWidth(F_canvasOutWidth());
+                canvas.setHeight(F_canvasOutHeight());
+                canvas.backgroundVpt = false //背景固定
+                canvas.preserveObjectStacking = true //活动对象是否顶层
+                canvas.isDrawingMode = false
+                canvas.freeDrawingBrush.width = 12;
+                canvas.freeDrawingBrush.color = "#88ee33";
+                canvas.freeDrawingBrush.shadow = new fabric.Shadow({
+                    blur: 0,
+                    offsetX: 0,
+                    offsetY: 0,
+                    affectStroke: true,
+                    color: '#88ee11',
+                });
+                console.log(canvas.freeDrawingBrush);
+                fabric.Image.fromURL('../images/p2.jpg', function (oImg) {
+                    _this.canvas.add(oImg)
+                })
+                /////////////////////////////////////// 物件改变时
+                canvas.on("object:modified", function (opt) {
+                    if (opt.target) {
+                        _this.miniMap.updata2()
+                    }
+                });
+                /////////////////////////////////////// 滚轮缩放
+                canvas.on("mouse:wheel", function (opt) {
+                    console.log(canvas);
+
+                    let delta = opt.e.deltaY;
+                    let zoom = canvas.getZoom();
+                    zoom *= 0.999 ** delta;
+                    if (zoom > 100) zoom = 100;
+                    if (zoom < 0.05) zoom = 0.05;
+                    canvas.zoomToPoint({
+                            x: opt.e.offsetX,
+                            y: opt.e.offsetY,
+                        },
+                        zoom
+                    );
+
+                    opt.e.preventDefault();
+                    opt.e.stopPropagation();
+                });
+                /////////////////////////////////////// 画布尺寸随窗口改变
+                window.onresize = function () {
+                    console.log('window.onresize');
+                    Fn_fabric.throttle.run(_ => {
+                        canvas.setWidth(F_canvasOutWidth());
+                        canvas.setHeight(F_canvasOutHeight());
+                    }, 500)
+                }
+                /////////////////////////////////////// 拖动
+                // 鼠标按下
+                canvas.on("mouse:down", function (opt) {
+                    if (_this.isSelection) return
+                    let evt = opt.e;
+                    if (!opt.target) {
+                        this.isDragging = true;
+                        this.selection = false;
+                        this.lastPosX = evt.clientX;
+                        this.lastPosY = evt.clientY;
+                    }
+                });
+                // 鼠标移动
+                canvas.on("mouse:move", function (opt) {
+                    if (_this.isSelection) return
+                    if (this.isDragging && !this.isDrawingMode) {
+                        let e = opt.e;
+                        let vpt = this.viewportTransform;
+                        vpt[4] += e.clientX - this.lastPosX;
+                        vpt[5] += e.clientY - this.lastPosY;
+                        this.lastPosX = e.clientX;
+                        this.lastPosY = e.clientY;
+                        this.requestRenderAll();
+                    }
+
+                });
+                // 鼠标松开
+                canvas.on("mouse:up", function (opt) {
+                    if (_this.isSelection) return
+                    // 在鼠标悬停时，我们想为所有对象重新计算新的交互
+                    this.setViewportTransform(this.viewportTransform);
+                    this.isDragging = false;
+                    this.selection = true;
+                });
+                /////////////////////////////////////// 鼠标双击缩放画布
+                canvas.on("mouse:dblclick", function (opt) {
+                    let obj = opt.target;
+                    if (obj) return; //选中对象时不执行
+                    let zoom = canvas.getZoom();
+                    let F_canvasZoom = canvas.getZoom()
+                    // 100%模式
+                    if (zoom === F_canvasZoom) {
+                        canvas.zoomToPoint({
+                                x: opt.e.offsetX,
+                                y: opt.e.offsetY,
+                            },
+                            1
+                        );
+                    }
+
+                    opt.e.preventDefault();
+                    opt.e.stopPropagation();
+                });
+            },
+            methods: {
+                creatMiniMap(bigCanvas) {
+                    let minPic, moveView
+                    let min = new fabric.Canvas('miniMap', {
+                        selection: false,
+                        padding: 10,
+                    });
+                    min.setWidth(100)
+                    min.setHeight(100 )
+                    min.setBackgroundColor(
+                        'rgba(255, 255, 255, 1)',
+                        min.renderAll.bind(min)
+                    );
+                    let updata2 = _ => {
+                        if (min.getObjects().length) {
+                            min.clear()
+                            min.setBackgroundColor(
+                                'rgba(255, 255, 255, 1)',
+                                min.renderAll.bind(min)
+                            );
+                            min.renderAll()
+                        }
+                        let objs = bigCanvas.getObjects()
+                        let top = Math.min(...objs.map(m => {
+                            return m.getBoundingRect().top
+                        }))
+                        let left = Math.min(...objs.map(m => {
+                            return m.getBoundingRect().left
+                        }))
+                        let right = Math.max(...objs.map(m => {
+                            return m.getBoundingRect().left + m.getBoundingRect().width
+                        }))
+                        let bottom = Math.max(...objs.map(m => {
+                            return m.getBoundingRect().top + m.getBoundingRect().height
+                        }))
+                        // 缩略图的清晰度 3倍够了
+                        let clarity = min.width / bigCanvas.width / bigCanvas.getZoom() * 3
+                        // 获取canva el
+                        let data = bigCanvas.toCanvasElement(clarity, {
+                            left,
+                            top,
+                            width: right - left,
+                            height: bottom - top
+                        })
+                        // el转image放min中
+                        let minPicZoom = Math.min(min.width / data.width, min.height / data.height)
+                        minPic = new fabric.Image(data, {
+                            selectable: false,
+                            evented: false,
+                            left: 0,
+                            top: 0,
+                            scaleX: minPicZoom * 1, // 留点边距0.1
+                            scaleY: minPicZoom * 1,
+                        })
+                        // console.log(minPic.height);
+                        // min.setHeight( minPic.height/100)
+                        min.add(minPic)
+                        minPic.center()
+                        min.renderAll()
+                        document.querySelector('body').appendChild(data)
+                        console.log(
+                            bigCanvas.toCanvasElement(1),
+                            bigCanvas.toCanvasElement(1).height
+
+                        );
+                        // 
+                        // 
+                        let minMoveViewZoom = Math.min(min.width / bigCanvas.width, min.height / bigCanvas
+                            .height)
+                        console.log(
+                            -bigCanvas.viewportTransform[4] * minMoveViewZoom,
+                            -bigCanvas.viewportTransform[5] * minMoveViewZoom,
+                            min.width / bigCanvas.width,
+                            min.height / bigCanvas.height,
+                            bigCanvas.width,
+                            bigCanvas.height
+                        );
+                        moveView = new fabric.Rect({
+                            width: bigCanvas.width,
+                            height: bigCanvas.height,
+                            scaleX: min.width / bigCanvas.width / bigCanvas.viewportTransform[0],
+                            scaleY: min.height / bigCanvas.height / bigCanvas.viewportTransform[0],
+                            // left: -bigCanvas.viewportTransform[4] * min.width / bigCanvas.width /
+                            //     bigCanvas.viewportTransform[0] * data.width/bigCanvas.width,
+                            // top: -bigCanvas.viewportTransform[5] * min.height / bigCanvas.height /
+                            //     bigCanvas.viewportTransform[0] * data.height/bigCanvas.height,
+                            fill: 'rgba(0,0,0,0)',
+                            stroke: 'rgba(0,0,0,.7)',
+                            strokeWidth: 111,
+                            originX: 'left',
+                            originY: 'top',
+                            hasControls: false,
+                        })
+
+                        // min.add(moveView)
+                    }
+                    updata2()
+
+
+                    return {
+                        min,
+                        minPic,
+                        updata2,
+                    }
+                }
+            },
+            updated() {},
+
+            computed: {
+
+            },
+            watch: {}
+        })
+    </script>
+</body>
+<!-- from: https://github.com/renzhezhilu/fabric.js-doc-cn -->
+
+</html>
