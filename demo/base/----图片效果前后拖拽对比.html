@@ -10,14 +10,59 @@
     <script src="../js/Fn_fabric.js"></script>
     <script src="../js/vue.min.js"></script>
     <!-- <script src="../js/jquery.min.js"></script> -->
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        .view {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            z-index: 100;
+            /* background-color: red; */
+        }
+        .butGroup{
+            position: absolute;
+            top: 0;
+            z-index: 10;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        canvas#fabricjsDocCn {
+            border-radius: 0;
+            margin: 0;
+        }
+    </style>
 </head>
 
 <body>
     <main id="app">
         <h1>图片效果前后拖拽对比</h1>
-        <!-- <p>xxxxx</p> -->
-        <!-- <button>按钮</button> -->
-        <canvas id="fabricjsDocCn"></canvas>
+        <p>xxxxx</p>
+        <button>按钮</button>
+        <div class="view">
+            <div class="butGroup">
+                <div class="but">
+                    100%
+                </div>
+                <div class="but">
+                    <input type="text">
+                </div>
+                <div class="but" @click="">
+                    auto
+                </div>
+
+            </div>
+            <canvas id="fabricjsDocCn"></canvas>
+
+        </div>
+
     </main>
     <script>
         new Vue({
@@ -32,24 +77,414 @@
                 let _this = this
                 // 初始化
                 this.canvas = Fn_fabric.initCanvas()
+
+                let canvas = this.canvas
+                canvas.setWidth(window.innerWidth)
+                canvas.setHeight(window.innerHeight)
+                canvas.setBackgroundColor(
+                    "rgba(0, 0, 0, 0.8)",
+                    canvas.renderAll.bind(canvas)
+                );
                 Fn_fabric.initObject()
-                ////////////////////////////////////////////
-                fabric.Image.fromURL('../images/p1.jpg', function (pic) {
-                    // pattern._width = oImg.width
-                    // pattern._height = oImg.height
-                    console.log(pic);
-                    // pattern.source = oImg.getElement()
-                    pic.set({
-                        left: 20,
-                        top: 30,
-                        scaleX: .3,
-                        scaleY: .3,
-                        // fill: pattern,
-                    });
-                    _this.canvas.add(pic)
-                    _this.startCompared(_this.canvas, pic)
-                    _this.photo = pic
+                canvas.set({
+                    imageSmoothingEnabled: false,
                 })
+                setTimeout(() => {
+                    canvas.set({
+                        imageSmoothingEnabled: true,
+                    })
+                    canvas.renderAll()
+                }, 10000);
+                ////
+                fabric.Object.prototype.setControlsVisibility({
+                    bl: false, // 左下
+                    br: false, // 右下
+                    mb: false, // 下中
+                    ml: false, // 中左
+                    mr: false, // 中右
+                    mt: false, // 上中
+                    tl: false, // 上左
+                    tr: false, // 上右
+                    mtr: false, // 旋转控制键
+                })
+                // 
+                let img1, img2, move, leftT, rightT
+                // 
+                leftT = new fabric.Text(
+                    `psd\n88Kb\n1900x839`, {
+                        originX: 'right',
+                        originY: 'bottom',
+                        textAlign: 'right',
+                        fontSize: 16,
+                        fill: '#fff',
+                        fontFamily: 'SF Pro Text, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif'
+                    }
+                )
+                rightT = new fabric.Text(
+                    `psd\n88Kb\n1900x839`, {
+                        originX: 'left',
+                        originY: 'bottom',
+                        textAlign: 'left',
+                        fontSize: 16,
+                        fill: '#fff',
+                        fontFamily: 'SF Pro Text, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif'
+
+                    }
+                )
+                // 
+                function moveIcon() {
+                    let r = new fabric.Rect({
+                        width: 6,
+                        height: 100000,
+                        fill: 'rgba(0,0,0,.5)',
+                        left: 0
+                    })
+                    let p = new fabric.Path(
+                        'M554.666667 256v213.333333h213.333333V330.666667L949.333333 512 768 693.333333V554.666667h-213.333333v213.333333h138.666666L512 949.333333 330.666667 768H469.333333v-213.333333H256v138.666666L74.666667 512 256 330.666667V469.333333h213.333333V256H330.666667L512 74.666667 693.333333 256H554.666667z', {
+                            scaleX: 0.03,
+                            scaleY: 0.03,
+                            fill: 'rgba(255,255,255,.3)',
+                            top: 100000 / 2 - 17,
+                            left: -10,
+                        }
+
+
+                    );
+                    let c = new fabric.Circle({
+                        fill: 'rgba(0,0,0,.9)',
+                        radius: 30,
+                        top: 100000 / 2 - 35,
+                        left: -27
+                    });
+                    let group = new fabric.Group([r, c, p])
+                    group.set({
+                        lockMovementY: true,
+                        originX: 'center',
+                        // originY: 'center',
+                        hasBorders: false,
+                        // selectable:false
+                    })
+                    // group.forEachObject(function (obj) {
+                    //         obj.set({
+                    //             originY: "center",
+                    //             top: 0,
+                    //         });
+                    //     });
+                    //     group.setCoords();
+                    return group
+                }
+                move = moveIcon()
+                /////////////
+                function eventStart() {
+                    move.on('moving', function (e) {
+                        console.log(move.left, img1.left, img1.left + img1._width);
+                        if (move.left <= (img1.left + img1._width) && move.left >= img1.left) {
+                            // console.log(11111);
+                            let w = Math.abs(img1.left - move.left)
+                            img1.set({
+                                width: w
+                            })
+                        }
+                        let zoom = canvas.getZoom()
+                        leftT.set({
+                            left: move.left - 10 / zoom,
+                        })
+                        rightT.set({
+                            left: move.left + 10 / zoom,
+                        })
+                        console.log();
+                    })
+                }
+                /////////////////
+
+
+
+
+
+
+                /////////////////
+
+                var pattern = new fabric.Pattern({
+                    source: null,
+                    repeat: 'no-repeat'
+                })
+                var pattern2 = new fabric.Pattern({
+                    source: null,
+                    repeat: 'no-repeat'
+                })
+                // fabric.Image.fromURL('../images/p1.jpg', function (oImg) {
+                //     fabric.Image.fromURL('../images/p1_1.jpg', function (oImg2) {
+                fabric.Image.fromURL('../images/pic.jpg', function (oImg) {
+                    fabric.Image.fromURL('../images/pic_1.jpg', function (oImg2) {
+                        oImg2.set({
+                            selectable: false,
+                            evented: false,
+                        })
+                        // oImg.set({
+                        //     selectable: false,
+                        //     evented: false,
+                        // })
+                        // 
+                        pattern.source = oImg.getElement()
+                        pattern._width = oImg.width
+                        pattern._height = oImg.height
+                        // 
+                        pattern2.source = oImg2.getElement()
+                        pattern2._width = oImg2.width
+                        pattern2._height = oImg2.height
+                        img1 = new fabric.Rect({
+                            width: oImg.width,
+                            _width: oImg.width,
+                            height: oImg.height,
+                            fill: pattern,
+                            selectable: false,
+                            evented: false,
+                        });
+                        img2 = new fabric.Rect({
+                            width: oImg2.width,
+                            _width: oImg2.width,
+                            height: oImg2.height,
+                            fill: pattern2,
+                            selectable: false,
+                            evented: false,
+                        });
+                        // img2 = oImg2
+                        Fn_fabric.putCenter(canvas, img2, false)
+                        Fn_fabric.putCenter(canvas, img1, false)
+
+                        console.log(img1);
+                        Fn_fabric.putCenter(canvas, move, false)
+                        eventStart()
+                        canvas.add(leftT, rightT)
+                        Fn_fabric.putCenter3(canvas, leftT)
+                        Fn_fabric.putCenter3(canvas, rightT)
+                        leftT.set({
+                            left: move.left - 10,
+                        })
+                        rightT.set({
+                            left: move.left + 10,
+                        })
+                        // 
+
+                        move.set({
+                            // top: window.innerHeight / 2,
+                            _left: move.left
+                        })
+                        img1.set({
+                            width: Math.abs(img1.left - move.left),
+                        })
+                        canvas.renderAll()
+                        // Fn_fabric.putCenter(_this.canvas, oImg)
+                    })
+                })
+
+
+
+
+                ////////////////////////////////////////////
+                // fabric.Image.fromURL('../images/p1.jpg', function (pic1) {
+
+                //     fabric.Image.fromURL('../images/p1_1.jpg', function (pic2) {
+                //         // pattern._width = oImg.width
+                //         // pattern._height = oImg.height
+                //         // console.log(pic);
+                //         // pattern.source = oImg.getElement()
+                //         // pic.set({
+                //         //     left: 20,
+                //         //     top: 30,
+                //         //     scaleX: .3,
+                //         //     scaleY: .3,
+                //         //     // fill: pattern,
+                //         // });
+                //         pic1.set({
+                //             // selectable: false,
+                //             // evented: false,
+                //             scaleX: 2,
+                //             scaleY: 2,
+                //             clipPath: new fabric.Rect({
+                //                 width: pic1.width,
+                //                 height: pic1.height,
+                //                 fill: 'blue',
+                //             })
+                //         })
+                //         console.log(pic1.scaleX);
+                //         pic2.set({
+                //             // selectable: false,
+                //             // evented: false,
+                //         })
+
+                //         Fn_fabric.putCenter(canvas, pic2, false)
+                //         Fn_fabric.putCenter(canvas, pic1, false)
+                //         Fn_fabric.putCenter(canvas, moveIcon(), false)
+
+                //         // _this.canvas.add(pic)
+                //         // _this.startCompared(_this.canvas, pic)
+                //         // _this.photo = pic
+                //     })
+                // })
+
+                // 缩放时保持scaleX、scaleY，改变width和height
+                this.canvas.on('object:scaling', function (e) {
+                    let obj = e.target
+                    if (obj.width <= obj.fill._width) {
+                        obj.set({
+                            'height': obj.height * obj.scaleY,
+                            'width': obj.width * obj.scaleX,
+                            'scaleX': 1,
+                            'scaleY': 1
+                        });
+                    } else {
+                        obj.set({
+                            'scaleX': 1,
+                            'scaleY': 1,
+                            width: obj.fill._width,
+                        });
+                    }
+                    // || obj.width >= 50
+
+                    console.log(obj);
+
+                    // obj.fill.offsetX = -obj.left
+                    // obj.fill.offsetY = -obj.top
+                })
+                /////////////////////////////////////// 滚轮缩放
+                canvas.on("mouse:wheel", function (opt) {
+                    // console.log(canvas);
+
+                    let delta = opt.e.deltaY;
+                    console.log(delta);
+                    let zoom = canvas.getZoom();
+                    zoom *= 0.999 ** delta;
+                    if (zoom > 100) zoom = 100;
+                    if (zoom < 0.05) zoom = 0.05;
+                    canvas.zoomToPoint({
+                            x: opt.e.offsetX,
+                            y: opt.e.offsetY,
+                        },
+                        zoom
+                    );
+                    console.log(canvas);
+                    console.log(canvas.getZoom(), 1 - (canvas.getZoom() - 1));
+                    move.set({
+                        scaleX: Math.abs(1 / zoom),
+                        scaleY: Math.abs(1 / zoom),
+                    })
+                    Fn_fabric.putCenter2(canvas, move)
+                    let w = Math.abs(img1.left - move.left)
+                    img1.set({
+                        width: w
+                    })
+                    ////////
+                    Fn_fabric.putCenter3(canvas, leftT)
+                    Fn_fabric.putCenter3(canvas, rightT)
+                    leftT.set({
+                        scaleX: Math.abs(1 / zoom),
+                        scaleY: Math.abs(1 / zoom),
+                    })
+                    rightT.set({
+                        scaleX: Math.abs(1 / zoom),
+                        scaleY: Math.abs(1 / zoom),
+                    })
+                    leftT.set({
+                        left: move.left - 10 / zoom,
+                    })
+                    rightT.set({
+                        left: move.left + 10 / zoom,
+                    })
+
+                    //     canvas.requestRenderAll();
+                    // console.log(move);
+
+                    opt.e.preventDefault();
+                    opt.e.stopPropagation();
+                });
+
+                /////////////////////////////////////// 拖动
+                // 鼠标按下
+                canvas.on("mouse:down", function (opt) {
+                    if (_this.isSelection) return
+                    let evt = opt.e;
+                    if (!opt.target) {
+                        this.isDragging = true;
+                        this.selection = false;
+                        this.lastPosX = evt.clientX;
+                        this.lastPosY = evt.clientY;
+                    }
+                });
+                // 鼠标移动
+                canvas.on("mouse:move", function (opt) {
+                    if (_this.isSelection) return
+                    if (this.isDragging && !this.isDrawingMode) {
+                        let e = opt.e;
+                        let vpt = this.viewportTransform;
+                        vpt[4] += e.clientX - this.lastPosX;
+                        vpt[5] += e.clientY - this.lastPosY;
+                        this.lastPosX = e.clientX;
+                        this.lastPosY = e.clientY;
+                        console.log(vpt[4]);
+
+                        // move.forEachObject(function (obj) {
+                        //     obj.set({
+                        //         originY: "center",
+                        //         top: 0,
+                        //     });
+                        // });
+                        // move.setCoords();
+                        Fn_fabric.putCenter2(canvas, move)
+                        let w = Math.abs(img1.left - move.left)
+                        img1.set({
+                            width: w
+                        })
+                        ///////
+                        let zoom = canvas.getZoom();
+                        // move.set({
+                        //     left: move._left - vpt[4] / canvas.getZoom()
+                        // })
+                        // Fn_fabric.putCenter3(canvas, leftT)
+                        // Fn_fabric.putCenter3(canvas, rightT)
+                        // leftT.set({
+                        //     scaleX: Math.abs(1 / zoom),
+                        //     scaleY: Math.abs(1 / zoom),
+                        // })
+                        // rightT.set({
+                        //     scaleX: Math.abs(1 / zoom),
+                        //     scaleY: Math.abs(1 / zoom),
+                        // })
+                        // leftT.set({
+                        //     left: move.left - 10 / zoom,
+                        // })
+                        // rightT.set({
+                        //     left: move.left + 10 / zoom,
+                        // })
+                        // 
+                        Fn_fabric.putCenter3(canvas, leftT)
+                        Fn_fabric.putCenter3(canvas, rightT)
+                        leftT.set({
+                            scaleX: Math.abs(1 / zoom),
+                            scaleY: Math.abs(1 / zoom),
+                        })
+                        rightT.set({
+                            scaleX: Math.abs(1 / zoom),
+                            scaleY: Math.abs(1 / zoom),
+                        })
+
+                        canvas.renderAll();
+                    }
+
+                });
+                // 鼠标松开
+                canvas.on("mouse:up", function (opt) {
+                    if (_this.isSelection) return
+                    // 在鼠标悬停时，我们想为所有对象重新计算新的交互
+                    this.setViewportTransform(this.viewportTransform);
+                    this.isDragging = false;
+                    this.selection = true;
+                    // 
+                    move.set({
+                        _left: move.left
+                    })
+
+                });
             },
             methods: {
                 startCompared(canvas, pic) {
@@ -67,25 +502,9 @@
                         selectable: false,
                         evented: false,
                     }
-                    let filter = {
-                        // 模糊 0 -1
-                        blur: new fabric.Image.filters.Blur({
-                            blur: .3
-                        }),
-                        //   像素画 1-1000
-                        blocksize: new fabric.Image.filters.Pixelate({
-                            blocksize: .3
-                        })
-                    }
                     // 透明背景
-                    pic.clone((p)=>{
-                        p.setSrc({})
-                    })
-                    let after = new fabric.Rect({
-                        ...config,
-                        fill: 'rgba(0,0,0,.6)',
-                    });
-                    canvas.add(after)
+
+
                 }
             },
             updated() {},

@@ -101,6 +101,24 @@ window.Fn_fabric = {
         if (isActive) canvas.setActiveObject(obj)
         canvas.renderAll()
     },
+    putCenter2(canvas, obj) {
+        let vxy = this.Fn_viewCenterCoord(canvas)
+      
+        obj.set({
+            // left: vxy.x - (obj.width * obj.scaleX) / 2,
+            top: vxy.y - (obj.height * obj.scaleY) / 2,
+        })
+        canvas.renderAll()
+    },
+    putCenter3(canvas, obj) {
+        let vxy = this.Fn_viewCenterCoord(canvas)
+      
+        obj.set({
+            // left: vxy.x - (obj.width * obj.scaleX) / 2,
+            top: vxy.y + (window.innerHeight/2/canvas.getZoom()),
+        })
+        canvas.renderAll()
+    },
     // 节流  throttle.run(() => {}, 200)
     throttle: {
         val: null,

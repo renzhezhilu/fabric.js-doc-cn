@@ -21,11 +21,11 @@
         <button @click="one">1:1 </button>
 
         <div v-if="photo && photo._cropObject && photo._cropObject.crop">
-        {{
+            {{
             `宽：${photo._cropObject.crop.width} 高：${photo._cropObject.crop.height}`
 
         }}
-    </div>
+        </div>
         <br>
         <canvas id="fabricjsDocCn"></canvas>
     </main>
@@ -67,18 +67,8 @@
                     _this.photo = pic
 
                 })
-
-
-
-
-
-
-
-
                 // pattern.offsetX = -obj.left
                 // pattern.offsetY = -obj.top
-
-
 
             },
             updated() {},
@@ -109,8 +99,8 @@
                     this.photo.setSrc(this.photo._cropObject.output(), () => {
                         // this.photo.scaleX=1
                         // this.photo.scaleY=1
-                        this.photo.left=this.photo._cropObject.crop.left
-                        this.photo.top=this.photo._cropObject.crop.top
+                        this.photo.left = this.photo._cropObject.crop.left
+                        this.photo.top = this.photo._cropObject.crop.top
                         this.canvas.renderAll()
                         this.end()
                     })
@@ -205,6 +195,18 @@
                     // 移动时让背景pattern偏差，达到视觉背景固定的效果
                     // 缩放时保持scaleX、scaleY，改变width和height
                     crop.on('scaling', function (e) {
+
+                        if (crop.left + crop.width * crop.scaleX > pic.left + pic.width * pic.scaleX) {
+                            console.log(22222);
+                            crop.scaleX = pic.scaleX
+                            crop.scaleY = pic.scaleY
+                            return
+                        }
+                        if(crop.left <pic.left){
+                            crop.scaleX = pic.scaleX
+                            crop.scaleY = pic.scaleY
+                            return
+                        }
                         // 存在抖动问题！！！！
                         pattern.offsetX = -(crop.left - pic.left) / pic.scaleX
                         pattern.offsetY = -(crop.top - pic.top) / pic.scaleY
@@ -213,8 +215,15 @@
                         crop.width = crop.width * crop.scaleX / pic.scaleX,
                             crop.height = crop.height * crop.scaleY / pic.scaleY
                         // console.log(crop.width,crop.scaleX,pattern.offsetX );
+
+
+
                         crop.scaleX = pic.scaleX
                         crop.scaleY = pic.scaleY
+
+
+
+
 
                         // crop.set({
                         //     'width': crop.width * crop.scaleX/ pic.scaleX,
