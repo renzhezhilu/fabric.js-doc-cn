@@ -1,28 +1,27 @@
 
-<!-- # 教程
-- [免费视频教程(12)]()
-- [进阶付费视频教程(28)]()
-    - 28个可直接用于生产的复杂demo的完整源代码
-    - 每个demo的详细视频讲解
-    - 加入专属QQ群专人在线答疑解惑
-    - 获得一颗作者的感恩之心^ _ ^
-# demo
-- [简单的demo]()
-主要用于更快的了解文档api的实际使用情况
-- [完整demo]()
-    - 具备完整功能的demo
-- [官方demo]() -->
+# 自制简单案例
+[加入基础物件](demo/base/加入基础物件.html)
+[demo/base/图片旋转倾斜后输出](demo/base/图片旋转倾斜后输出.html)
+[demo/base/定量移动&缩放&旋转&倾斜+网格背景](demo/base/定量移动倾斜+网格背景.html)
+[文字标签](demo/base/文字标签.html)
+[显示图层](demo/base/显示图层.html)
+[灵活箭头](demo/base/灵活箭头.html)
+[特效图层](demo/base/特效图层.html)
+[特效画笔](demo/base/特效画笔.html)
+[画布-滚轮缩放和拖拽平移](demo/base/画布-滚轮缩放和拖)
+[组的操作](demo/base/组的操作.html)
+[裁剪-图片真实裁剪](demo/base/裁剪-图片真实裁剪.h[裁剪-物件遮罩](demo/base/裁剪-物件遮罩.html)
+[----图片效果前后拖拽对比](demo/base/----图片效果前后)
+[----恐龙小游戏](demo/base/----恐龙小游戏.html)
 
-# fabric.js中文文档(4.2.0)
+# fabric.js中文文档(4.2.0) 参看doc文件夹
 完全对照官方文档翻译
-<!-- 进度 1% -->
-
 
 link: http://fabricjs.com/docs/
 
 github: https://github.com/fabricjs/fabric.js
 
-
+<!-- 
 
 # 按字母顺序分类
 
@@ -147,4 +146,4 @@ github: https://github.com/fabricjs/fabric.js
 
 ##
 - []()
-- []()
+- []() -->
